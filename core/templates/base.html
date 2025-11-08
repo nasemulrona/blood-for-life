@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+{% load i18n %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .navbar-brand {
+            font-weight: bold;
+        }
+        
+        /* Wave Background Styles */
+        .wave-container {
+            position: relative;
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+            overflow: hidden;
+        }
+        
+        .waves {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 15vh;
+            min-height: 100px;
+            max-height: 150px;
+        }
+        
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 100%;
+            background-repeat: repeat-x;
+            background-position: 0 bottom;
+            transform-origin: center bottom;
+        }
+        
+        .wave1 {
+            background-size: 50% 100px;
+            background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1200 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" fill="white"/></svg>');
+            animation: wave 12s linear infinite;
+        }
+        
+        .wave2 {
+            background-size: 50% 100px;
+            background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1200 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".5" fill="white"/></svg>');
+            animation: wave 10s linear infinite;
+        }
+        
+        .wave3 {
+            background-size: 50% 100px;
+            background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1200 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" fill="white"/></svg>');
+            animation: wave 8s linear infinite;
+        }
+        
+        @keyframes wave {
+            0% {
+                transform: translateX(0);
+            }
+            50% {
+                transform: translateX(-25%);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+        
+        .feature-icon {
+            transition: transform 0.3s;
+        }
+        
+        .card:hover .feature-icon {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-danger">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'public_home' %}">
+                <i class="fas fa-tint me-2"></i>Blood Management System
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <!-- Language Switcher -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" 
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-language me-1"></i>
+                            {% get_current_language as LANGUAGE_CODE %}
+                            {% if LANGUAGE_CODE == 'en' %}English{% else %}বাংলা{% endif %}
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                            <li>
+                                <form action="{% url 'set_language' %}" method="post" class="d-inline">
+                                    {% csrf_token %}
+                                    <input name="next" type="hidden" value="{{ request.path }}">
+                                    <input name="language" type="hidden" value="en">
+                                    <button type="submit" class="dropdown-item {% if LANGUAGE_CODE == 'en' %}active{% endif %}">
+                                        English
+                                    </button>
+                                </form>
+                            </li>
+                            <li>
+                                <form action="{% url 'set_language' %}" method="post" class="d-inline">
+                                    {% csrf_token %}
+                                    <input name="next" type="hidden" value="{{ request.path }}">
+                                    <input name="language" type="hidden" value="bn">
+                                    <button type="submit" class="dropdown-item {% if LANGUAGE_CODE == 'bn' %}active{% endif %}">
+                                        বাংলা
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'home' %}">
+                                <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                            </a>
+                        </li>
+                        {% if user.role == 'admin' %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="/admin/">
+                                    <i class="fas fa-cog me-1"></i>Admin Panel
+                                </a>
+                            </li>
+                        {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'logout' %}">
+                                <i class="fas fa-sign-out-alt me-1"></i>Logout
+                            </a>
+                        </li>
+                    {% else %}
+                        <!-- Removed login/register links from navbar -->
+                        <!-- Only show dashboard for authenticated users -->
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Footer with Wave -->
+    <div class="wave-container mt-5">
+        <div class="waves">
+            <div class="wave wave1"></div>
+            <div class="wave wave2"></div>
+            <div class="wave wave3"></div>
+        </div>
+        <footer class="bg-danger text-light py-4 position-relative">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5><i class="fas fa-tint me-2"></i>Blood Management System</h5>
+                        <p class="mb-0">Saving lives through blood donation</p>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <p class="mb-0">&copy; 2025 Blood Management System. All rights reserved. Powered by nasemulrona</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

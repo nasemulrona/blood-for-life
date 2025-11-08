@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3 mb-0">Donation Requests Management</h1>
+                <div class="btn-group">
+                    <a href="{% url 'admin_donors' %}" class="btn btn-outline-primary">Manage Donors</a>
+                    <a href="{% url 'admin_blood_banks' %}" class="btn btn-outline-success">Blood Banks</a>
+                </div>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Requests</h5>
+                            <h2 class="mb-0">{{ total_requests }}</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-warning text-dark">
+                        <div class="card-body">
+                            <h5 class="card-title">Pending</h5>
+                            <h2 class="mb-0">{{ status_counts.pending }}</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-success text-white">
+                        <div class="card-body">
+                            <h5 class="card-title">Approved</h5>
+                            <h2 class="mb-0">{{ status_counts.approved }}</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-danger text-white">
+                        <div class="card-body">
+                            <h5 class="card-title">Rejected</h5>
+                            <h2 class="mb-0">{{ status_counts.rejected }}</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Requests Table -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">All Donation Requests</h5>
+                </div>
+                <div class="card-body">
+                    {% if donation_requests %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Donor</th>
+                                    <th>Blood Group</th>
+                                    <th>Units</th>
+                                    <th>Hospital</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for request in donation_requests %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ request.donor.email }}</strong><br>
+                                        <small class="text-muted">{{ request.donor.get_full_name|default:request.donor.username }}</small>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-danger">{{ request.blood_group }}</span>
+                                    </td>
+                                    <td>{{ request.units }}</td>
+                                    <td>{{ request.hospital_name|default:"Not specified" }}</td>
+                                    <td>
+                                        <span class="badge 
+                                            {% if request.status == 'pending' %}bg-warning
+                                            {% elif request.status == 'approved' %}bg-success
+                                            {% else %}bg-danger{% endif %}">
+                                            {{ request.status|title }}
+                                        </span>
+                                    </td>
+                                    <td>{{ request.created_at|date:"M d, Y" }}</td>
+                                    <td>
+                                        {% if request.status == 'pending' %}
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="{% url 'approve_request' request.id %}" 
+                                               class="btn btn-success" 
+                                               onclick="return confirm('Approve this donation request?')">
+                                                Approve
+                                            </a>
+                                            <a href="{% url 'reject_request' request.id %}" 
+                                               class="btn btn-danger"
+                                               onclick="return confirm('Reject this donation request?')">
+                                                Reject
+                                            </a>
+                                        </div>
+                                        {% else %}
+                                        <span class="text-muted">Processed</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                        <h5>No donation requests found</h5>
+                        <p class="text-muted">There are no donation requests to display.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

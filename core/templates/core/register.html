@@ -1,0 +1,205 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-lg border-0">
+            <div class="card-header bg-primary text-white text-center py-3">
+                <h3 class="mb-0"><i class="fas fa-user-plus me-2"></i>Register as Donor</h3>
+                <p class="mb-0 mt-1">Join our blood donation community</p>
+            </div>
+            <div class="card-body p-4">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger alert-dismissible fade show">
+                            {% for error in form.non_field_errors %}
+                                {{ error }}
+                            {% endfor %}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endif %}
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="id_email" class="form-label fw-bold">Email Address *</label>
+                                {{ form.email }}
+                                {% if form.email.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.email.errors %}
+                                            <i class="fas fa-exclamation-circle me-1"></i>{{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="id_username" class="form-label fw-bold">Username *</label>
+                                {{ form.username }}
+                                {% if form.username.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.username.errors %}
+                                            <i class="fas fa-exclamation-circle me-1"></i>{{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="id_first_name" class="form-label fw-bold">First Name</label>
+                                {{ form.first_name }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="id_last_name" class="form-label fw-bold">Last Name</label>
+                                {{ form.last_name }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="id_password" class="form-label fw-bold">Password *</label>
+                                {{ form.password }}
+                                {% if form.password.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.password.errors %}
+                                            <i class="fas fa-exclamation-circle me-1"></i>{{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="id_password2" class="form-label fw-bold">Confirm Password *</label>
+                                {{ form.password2 }}
+                                {% if form.password2.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.password2.errors %}
+                                            <i class="fas fa-exclamation-circle me-1"></i>{{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Blood Group Field -->
+                    <div class="mb-4">
+                        <label for="id_blood_group" class="form-label fw-bold">Blood Group *</label>
+                        <select name="blood_group" id="id_blood_group" class="form-select" required>
+                            <option value="">Select your blood group</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                        </select>
+                        <div class="form-text">Please select your blood group accurately.</div>
+                    </div>
+
+                    <!-- Phone Number Field -->
+                    <div class="mb-3">
+                        <label for="id_phone" class="form-label fw-bold">Phone Number</label>
+                        {{ form.phone }}
+                        {% if form.phone.errors %}
+                            <div class="text-danger small mt-1">
+                                {% for error in form.phone.errors %}
+                                    <i class="fas fa-exclamation-circle me-1"></i>{{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="form-text">Optional - You can add your phone number later</div>
+                    </div>
+
+                    <!-- City Field -->
+                    <div class="mb-3">
+                        <label for="id_city" class="form-label fw-bold">City</label>
+                        {{ form.city }}
+                        {% if form.city.errors %}
+                            <div class="text-danger small mt-1">
+                                {% for error in form.city.errors %}
+                                    <i class="fas fa-exclamation-circle me-1"></i>{{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="form-text">Optional - Enter your city name</div>
+                    </div>
+
+                    <!-- Last Donation Field -->
+                    <div class="mb-4">
+                        <label for="id_last_donation" class="form-label fw-bold">Last Donation Date</label>
+                        {{ form.last_donation }}
+                        {% if form.last_donation.errors %}
+                            <div class="text-danger small mt-1">
+                                {% for error in form.last_donation.errors %}
+                                    <i class="fas fa-exclamation-circle me-1"></i>{{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="form-text">Optional - When was your last blood donation?</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="id_role" class="form-label fw-bold">Account Type *</label>
+                        {{ form.role }}
+                        <div class="form-text">Select "Donor" if you want to donate blood, "Admin" for management access.</div>
+                    </div>
+
+                    <div class="d-grid mb-3">
+                        <button type="submit" class="btn btn-primary btn-lg fw-bold">
+                            <i class="fas fa-user-plus me-2"></i>Create Account
+                        </button>
+                    </div>
+
+                    <div class="text-center">
+                        <p class="mb-0">Already have an account? 
+                            <a href="{% url 'login_page' %}" class="text-primary fw-bold">Login here</a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-center py-3">
+                <small class="text-muted">
+                    <i class="fas fa-shield-alt me-1"></i>
+                    Your information is secure and protected
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.card {
+    border-radius: 15px;
+}
+.form-control {
+    border-radius: 8px;
+    padding: 12px 15px;
+    border: 2px solid #e9ecef;
+    transition: all 0.3s;
+}
+.form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+.btn {
+    border-radius: 8px;
+    padding: 12px;
+}
+</style>
+
+{% endblock %}

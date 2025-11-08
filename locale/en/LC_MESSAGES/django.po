@@ -1,0 +1,98 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-08 10:56+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+#: core/templates/core/public_home.html:13
+msgid "Blood Management System"
+msgstr ""
+
+#: core/templates/core/public_home.html:16
+msgid "Join our mission to save lives through blood donation."
+msgstr ""
+
+#: core/templates/core/public_home.html:17
+msgid "Register as a donor or manage blood banks efficiently."
+msgstr ""
+
+#: core/templates/core/public_home.html:23
+msgid "Register as Donor"
+msgstr ""
+
+#: core/templates/core/public_home.html:26
+msgid "Login to Dashboard"
+msgstr ""
+
+#: core/templates/core/public_home.html:45
+msgid "Why Choose Our Platform?"
+msgstr ""
+
+#: core/templates/core/public_home.html:46
+msgid "We make blood donation management simple and efficient"
+msgstr ""
+
+#: core/templates/core/public_home.html:57
+msgid "Donor Management"
+msgstr ""
+
+#: core/templates/core/public_home.html:59
+msgid "Easy registration and profile management for blood donors."
+msgstr ""
+
+#: core/templates/core/public_home.html:60
+msgid "Track your donation history and requests."
+msgstr ""
+
+#: core/templates/core/public_home.html:72
+msgid "Blood Bank Management"
+msgstr ""
+
+#: core/templates/core/public_home.html:74
+msgid "Comprehensive management of blood banks and inventory."
+msgstr ""
+
+#: core/templates/core/public_home.html:75
+msgid "Real-time tracking of blood units."
+msgstr ""
+
+#: core/templates/core/public_home.html:87
+msgid "Donation Tracking"
+msgstr ""
+
+#: core/templates/core/public_home.html:89
+msgid "Track donation requests and history."
+msgstr ""
+
+#: core/templates/core/public_home.html:90
+msgid "Easy approval process for administrators."
+msgstr ""
+
+#: core/templates/core/public_home.html:105
+msgid "Registered Donors"
+msgstr ""
+
+#: core/templates/core/public_home.html:111
+msgid "Lives Saved"
+msgstr ""
+
+#: core/templates/core/public_home.html:117
+msgid "Blood Banks"
+msgstr ""
+
+#: core/templates/core/public_home.html:123
+msgid "Support Available"
+msgstr ""

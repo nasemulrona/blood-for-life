@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="h3 mb-4">Blood Bank Management</h1>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Blood Banks</h5>
+                </div>
+                <div class="card-body">
+                    {% if blood_banks %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>City</th>
+                                    <th>Address</th>
+                                    <th>Total Units</th>
+                                    <th>Blood Groups</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for bank in blood_banks %}
+                                <tr>
+                                    <td>{{ bank.name }}</td>
+                                    <td>{{ bank.city }}</td>
+                                    <td>{{ bank.address|default:"-" }}</td>
+                                    <td><strong>{{ bank.total_units }}</strong></td>
+                                    <td>
+                                        A+: {{ bank.units_a_plus }}, 
+                                        B+: {{ bank.units_b_plus }}, 
+                                        O+: {{ bank.units_o_plus }}, 
+                                        AB+: {{ bank.units_ab_plus }}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-muted">No blood banks found.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

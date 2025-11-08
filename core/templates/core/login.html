@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6 col-lg-4">
+        <div class="card shadow-lg border-0">
+            <div class="card-header bg-danger text-white text-center py-3">
+                <h3 class="mb-0"><i class="fas fa-tint me-2"></i>Blood Management System</h3>
+                <p class="mb-0 mt-1">Login to Your Account</p>
+            </div>
+            <div class="card-body p-4">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger alert-dismissible fade show">
+                            {% for error in form.non_field_errors %}
+                                {{ error }}
+                            {% endfor %}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endif %}
+
+                    <div class="mb-3">
+                        <label for="id_email" class="form-label fw-bold">Email Address</label>
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                            <div class="text-danger small mt-1">
+                                {% for error in form.email.errors %}
+                                    <i class="fas fa-exclamation-circle me-1"></i>{{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="id_password" class="form-label fw-bold">Password</label>
+                        {{ form.password }}
+                        {% if form.password.errors %}
+                            <div class="text-danger small mt-1">
+                                {% for error in form.password.errors %}
+                                    <i class="fas fa-exclamation-circle me-1"></i>{{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="d-grid mb-3">
+                        <button type="submit" class="btn btn-danger btn-lg fw-bold">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                        </button>
+                    </div>
+
+                    <div class="text-center">
+                        <p class="mb-0">Don't have an account? 
+                            <a href="{% url 'register' %}" class="text-danger fw-bold">Register here</a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-center py-3">
+                <small class="text-muted">
+                    <i class="fas fa-info-circle me-1"></i>
+                    Need help? Contact administrator
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.card {
+    border-radius: 15px;
+}
+.form-control {
+    border-radius: 8px;
+    padding: 12px 15px;
+    border: 2px solid #e9ecef;
+    transition: all 0.3s;
+}
+.form-control:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+.btn {
+    border-radius: 8px;
+    padding: 12px;
+}
+</style>
+
+{% endblock %}

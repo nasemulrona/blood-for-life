@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="h3 mb-4">Donation History</h1>
+            
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body text-center">
+                            <h5>Total Donations</h5>
+                            <h2>{{ total_donations }}</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card bg-success text-white">
+                        <div class="card-body text-center">
+                            <h5>Total Units</h5>
+                            <h2>{{ total_units }}</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card bg-info text-white">
+                        <div class="card-body text-center">
+                            <h5>Last Donation</h5>
+                            <h6>{{ history.0.donated_at|default:"Never" }}</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Donation Records</h5>
+                </div>
+                <div class="card-body">
+                    {% if history %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Blood Group</th>
+                                    <th>Units</th>
+                                    <th>Approved By</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for donation in history %}
+                                <tr>
+                                    <td>{{ donation.donated_at|date:"M d, Y" }}</td>
+                                    <td><span class="badge bg-danger">{{ donation.blood_group }}</span></td>
+                                    <td>{{ donation.units }}</td>
+                                    <td>{{ donation.approved_by.username|default:"System" }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-history fa-3x text-muted mb-3"></i>
+                        <h5>No donation history</h5>
+                        <p class="text-muted">Your approved donations will appear here.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

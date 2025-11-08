@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: #dc3545; color: white; padding: 20px; text-align: center; }
+        .content { padding: 20px; background: #f8f9fa; }
+        .footer { text-align: center; padding: 20px; color: #6c757d; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Blood Management System</h1>
+        </div>
+        <div class="content">
+            <h2>Donation Request Approved!</h2>
+            <p>Dear {{ donor_name }},</p>
+            <p>We are pleased to inform you that your blood donation request has been approved.</p>
+            
+            <div style="background: white; padding: 15px; border-radius: 5px; margin: 20px 0;">
+                <h3>Donation Details:</h3>
+                <p><strong>Blood Group:</strong> {{ blood_group }}</p>
+                <p><strong>Units:</strong> {{ units }}</p>
+                <p><strong>Approved Date:</strong> {{ approved_date }}</p>
+                {% if hospital_name %}
+                <p><strong>Hospital:</strong> {{ hospital_name }}</p>
+                {% endif %}
+            </div>
+            
+            <p>Thank you for your willingness to save lives through blood donation!</p>
+            <p>Please visit the hospital at your earliest convenience to complete the donation process.</p>
+        </div>
+        <div class="footer">
+            <p>&copy; 2025 Blood Management System. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

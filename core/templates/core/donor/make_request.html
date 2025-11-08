@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title mb-0">
+                        <i class="fas fa-hand-holding-heart text-danger me-2"></i>
+                        Make Blood Donation Request
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        {% if form.errors %}
+                        <div class="alert alert-danger">
+                            Please correct the errors below.
+                        </div>
+                        {% endif %}
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.blood_group.id_for_label }}" class="form-label">
+                                    Blood Group <span class="text-danger">*</span>
+                                </label>
+                                {{ form.blood_group }}
+                                {% if form.blood_group.errors %}
+                                <div class="text-danger small">
+                                    {{ form.blood_group.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.units.id_for_label }}" class="form-label">
+                                    Units Required <span class="text-danger">*</span>
+                                </label>
+                                {{ form.units }}
+                                {% if form.units.errors %}
+                                <div class="text-danger small">
+                                    {{ form.units.errors }}
+                                </div>
+                                {% endif %}
+                                <div class="form-text">Maximum 5 units allowed per request</div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.hospital_name.id_for_label }}" class="form-label">
+                                Hospital Name
+                            </label>
+                            {{ form.hospital_name }}
+                            {% if form.hospital_name.errors %}
+                            <div class="text-danger small">
+                                {{ form.hospital_name.errors }}
+                            </div>
+                            {% endif %}
+                            <div class="form-text">Enter the hospital where you plan to donate</div>
+                        </div>
+                        
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-paper-plane me-2"></i>
+                                Submit Request
+                            </button>
+                            <a href="{% url 'donation_requests' %}" class="btn btn-outline-secondary">
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

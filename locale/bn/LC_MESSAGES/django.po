@@ -1,0 +1,130 @@
+# Bengali translations for Blood Management System
+# Copyright (C) 2025 Blood Management System
+# This file is distributed under the same license as the Blood Management System package.
+# Nasemul Rona <email@address>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Blood Management System 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-08 10:55+0000\n"
+"PO-Revision-Date: 2025-11-08 11:00+0000\n"
+"Last-Translator: Nasemul Rona <email@address>\n"
+"Language-Team: Bengali <bn@li.org>\n"
+"Language: bn\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: core/templates/base.html:45
+msgid "Blood Management System"
+msgstr "ব্লাড ম্যানেজমেন্ট সিস্টেম"
+
+#: core/templates/base.html:87
+msgid "Dashboard"
+msgstr "ড্যাশবোর্ড"
+
+#: core/templates/base.html:93
+msgid "Admin Panel"
+msgstr "অ্যাডমিন প্যানেল"
+
+#: core/templates/base.html:98
+msgid "Logout"
+msgstr "লগআউট"
+
+#: core/templates/base.html:119
+msgid "Saving lives through blood donation"
+msgstr "রক্তদানের মাধ্যমে জীবন বাঁচানো"
+
+#: core/templates/base.html:122
+msgid "Powered by nasemulrona"
+msgstr "nasemulrona দ্বারা পরিচালিত"
+
+#: core/templates/base.html:73
+msgid "English"
+msgstr "ইংরেজি"
+
+#: core/templates/base.html:84
+msgid "বাংলা"
+msgstr "বাংলা"
+
+#: core/templates/core/public_home.html:10
+msgid "Blood Management System"
+msgstr "ব্লাড ম্যানেজমেন্ট সিস্টেম"
+
+#: core/templates/core/public_home.html:13
+msgid "Join our mission to save lives through blood donation."
+msgstr "রক্তদানের মাধ্যমে জীবন বাঁচানোর আমাদের মিশনে যোগ দিন।"
+
+#: core/templates/core/public_home.html:14
+msgid "Register as a donor or manage blood banks efficiently."
+msgstr "ডোনর হিসেবে নিবন্ধন করুন বা রক্তব্যাংক দক্ষতার সাথে পরিচালনা করুন।"
+
+#: core/templates/core/public_home.html:20
+msgid "Register as Donor"
+msgstr "ডোনর হিসেবে নিবন্ধন করুন"
+
+#: core/templates/core/public_home.html:23
+msgid "Login to Dashboard"
+msgstr "ড্যাশবোর্ডে লগইন করুন"
+
+#: core/templates/core/public_home.html:33
+msgid "Why Choose Our Platform?"
+msgstr "কেন আমাদের প্ল্যাটফর্ম বেছে নিবেন?"
+
+#: core/templates/core/public_home.html:34
+msgid "We make blood donation management simple and efficient"
+msgstr "আমরা রক্তদান ব্যবস্থাপনা সহজ এবং দক্ষ করে তুলি"
+
+#: core/templates/core/public_home.html:48
+msgid "Donor Management"
+msgstr "ডোনর ব্যবস্থাপনা"
+
+#: core/templates/core/public_home.html:49
+msgid "Easy registration and profile management for blood donors."
+msgstr "রক্তদাতাদের জন্য সহজ নিবন্ধন এবং প্রোফাইল ব্যবস্থাপনা।"
+
+#: core/templates/core/public_home.html:50
+msgid "Track your donation history and requests."
+msgstr "আপনার দানের ইতিহাস এবং অনুরোধগুলি ট্র্যাক করুন।"
+
+#: core/templates/core/public_home.html:62
+msgid "Blood Bank Management"
+msgstr "ব্লাড ব্যাংক ব্যবস্থাপনা"
+
+#: core/templates/core/public_home.html:63
+msgid "Comprehensive management of blood banks and inventory."
+msgstr "ব্লাড ব্যাংক এবং ইনভেন্টরির সামগ্রিক ব্যবস্থাপনা।"
+
+#: core/templates/core/public_home.html:64
+msgid "Real-time tracking of blood units."
+msgstr "রক্তের ইউনিটের রিয়েল-টাইম ট্র্যাকিং।"
+
+#: core/templates/core/public_home.html:76
+msgid "Donation Tracking"
+msgstr "দান ট্র্যাকিং"
+
+#: core/templates/core/public_home.html:77
+msgid "Track donation requests and history."
+msgstr "দানের অনুরোধ এবং ইতিহাস ট্র্যাক করুন।"
+
+#: core/templates/core/public_home.html:78
+msgid "Easy approval process for administrators."
+msgstr "প্রশাসকদের জন্য সহজ অনুমোদন প্রক্রিয়া।"
+
+#: core/templates/core/public_home.html:92
+msgid "Registered Donors"
+msgstr "নিবন্ধিত ডোনর"
+
+#: core/templates/core/public_home.html:98
+msgid "Lives Saved"
+msgstr "সংরক্ষিত জীবন"
+
+#: core/templates/core/public_home.html:104
+msgid "Blood Banks"
+msgstr "ব্লাড ব্যাংক"
+
+#: core/templates/core/public_home.html:110
+msgid "Support Available"
+msgstr "সাপোর্ট উপলব্ধ"

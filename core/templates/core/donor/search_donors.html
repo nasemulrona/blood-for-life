@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3 mb-0">
+                    <i class="fas fa-search me-2"></i>Find Blood Donors
+                </h1>
+                <a href="{% url 'home' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                </a>
+            </div>
+
+            <!-- Search Form -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-filter me-2"></i>Search Donors
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="get" action="{% url 'search_donors' %}">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Blood Group Needed</label>
+                                <select name="blood_group" class="form-select" required>
+                                    <option value="">Select Blood Group</option>
+                                    <option value="A+" {% if selected_blood_group == 'A+' %}selected{% endif %}>A+</option>
+                                    <option value="A-" {% if selected_blood_group == 'A-' %}selected{% endif %}>A-</option>
+                                    <option value="B+" {% if selected_blood_group == 'B+' %}selected{% endif %}>B+</option>
+                                    <option value="B-" {% if selected_blood_group == 'B-' %}selected{% endif %}>B-</option>
+                                    <option value="O+" {% if selected_blood_group == 'O+' %}selected{% endif %}>O+</option>
+                                    <option value="O-" {% if selected_blood_group == 'O-' %}selected{% endif %}>O-</option>
+                                    <option value="AB+" {% if selected_blood_group == 'AB+' %}selected{% endif %}>AB+</option>
+                                    <option value="AB-" {% if selected_blood_group == 'AB-' %}selected{% endif %}>AB-</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">City</label>
+                                <input type="text" name="city" class="form-control" 
+                                       placeholder="Enter city name" value="{{ selected_city }}">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">&nbsp;</label>
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="fas fa-search me-2"></i>Find Donors
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Results -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        Available Donors ({{ donors.count }} found)
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if donors %}
+                    <div class="row">
+                        {% for donor in donors %}
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h6 class="card-title mb-0 text-primary">
+                                            {% if donor.user.get_full_name %}
+                                                {{ donor.user.get_full_name }}
+                                            {% else %}
+                                                {{ donor.user.username }}
+                                            {% endif %}
+                                        </h6>
+                                        <span class="badge bg-danger">{{ donor.blood_group }}</span>
+                                    </div>
+                                    
+                                    <div class="donor-info small">
+                                        {% if donor.city %}
+                                        <p class="mb-1">
+                                            <i class="fas fa-map-marker-alt me-1 text-muted"></i>
+                                            {{ donor.city }}
+                                        </p>
+                                        {% endif %}
+                                        {% if donor.last_donation %}
+                                        <p class="mb-1">
+                                            <i class="fas fa-tint me-1 text-muted"></i>
+                                            Last donated: {{ donor.last_donation }}
+                                        </p>
+                                        {% endif %}
+                                        <p class="mb-0 text-success">
+                                            <i class="fas fa-check-circle me-1"></i>
+                                            Available for donation
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                        <h5>No donors available</h5>
+                        <p class="text-muted">
+                            {% if selected_blood_group %}
+                                No {{ selected_blood_group }} donors found
+                                {% if selected_city %}in {{ selected_city }}{% endif %}
+                            {% else %}
+                                Please select a blood group to search
+                            {% endif %}
+                        </p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

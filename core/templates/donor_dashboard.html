@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Your Profile</h3>
+<ul>
+  <li>Email: {{ profile.user.email }}</li>
+  <li>Blood group: {{ profile.blood_group }}</li>
+  <li>City: {{ profile.city }}</li>
+</ul>
+
+<h4>Donation history</h4>
+<table class="table">
+  <thead><tr><th>Blood Group</th><th>Units</th><th>Date</th></tr></thead>
+  <tbody>
+  {% for d in donations %}
+    <tr>
+      <td>{{ d.blood_group }}</td>
+      <td>{{ d.units }}</td>
+      <td>{{ d.donated_at }}</td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="3">No donations yet.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

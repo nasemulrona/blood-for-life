@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: #dc3545; color: white; padding: 20px; text-align: center; }
+        .content { padding: 20px; background: #f8f9fa; }
+        .footer { text-align: center; padding: 20px; color: #6c757d; }
+        .urgent { background: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Blood Management System</h1>
+        </div>
+        <div class="content">
+            <div class="urgent">
+                <h2>🩸 Urgent Blood Need!</h2>
+            </div>
+            
+            <p>Dear {{ donor_name }},</p>
+            <p>There is an urgent need for <strong>{{ blood_group }}</strong> blood in our system.</p>
+            
+            <div style="background: white; padding: 15px; border-radius: 5px; margin: 20px 0;">
+                <h3>Urgent Requirement:</h3>
+                <p><strong>Blood Group Needed:</strong> {{ blood_group }}</p>
+                <p><strong>Location:</strong> {{ location }}</p>
+                <p><strong>Contact:</strong> {{ contact_info }}</p>
+                {% if additional_info %}
+                <p><strong>Additional Information:</strong> {{ additional_info }}</p>
+                {% endif %}
+            </div>
+            
+            <p>Your donation can save lives! If you are available and eligible to donate, please visit the nearest blood bank or contact us.</p>
+            
+            <div style="text-align: center; margin: 25px 0;">
+                <a href="{{ site_url }}" style="background: #dc3545; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; display: inline-block;">
+                    Check Available Blood Banks
+                </a>
+            </div>
+        </div>
+        <div class="footer">
+            <p>&copy; 2025 Blood Management System. All rights reserved.</p>
+        </div>
+    </div>
+</html>
