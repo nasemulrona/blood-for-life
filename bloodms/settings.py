@@ -27,8 +27,7 @@ SECRET_KEY = 'django-insecure-spixfc)&@nm6wv9tv)pi09ulf&@8o(t#aft#&wetg305p*q+-_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['blood-management-django.onrender.com']
-CSRF_TRUSTED_ORIGINS = ['https://blood-management-django.onrender.com']
+
 
 
 

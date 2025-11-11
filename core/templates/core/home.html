@@ -2,206 +2,490 @@
 {% load i18n %}
 {% block content %}
 
-<div class="text-center mb-5">
-    <h1 class="text-danger">Welcome to Blood Management System</h1>
-    <p class="lead">Manage blood donations and requests easily</p>
-    
-    {% if user.is_authenticated %}
-        <div class="d-flex justify-content-center gap-3 mt-3">
-            <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
-            {% if user.role == 'admin' %}
-                <a href="/admin/" class="btn btn-warning">Admin Panel</a>
-            {% endif %}
+<!-- Hero Section -->
+<div class="dashboard-hero mb-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="hero-title">
+                    <i class="fas fa-tint me-3"></i>
+                    Blood For Life
+                </h1>
+                <p class="hero-subtitle">Manage blood donations and save lives efficiently</p>
+                
+                {% if user.is_authenticated %}
+                    <div class="hero-actions">
+                        <span class="welcome-text">Welcome back, {{ user.username }}!</span>
+                        <div class="action-buttons">
+                            <a href="{% url 'logout' %}" class="btn btn-light btn-sm">
+                                <i class="fas fa-sign-out-alt me-1"></i>Logout
+                            </a>
+                            {% if user.role == 'admin' %}
+                                <a href="/admin/" class="btn btn-warning btn-sm">
+                                    <i class="fas fa-cog me-1"></i>Admin Panel
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                <div class="hero-stats">
+                    <div class="stat-badge">
+                        <i class="fas fa-heartbeat"></i>
+                        <span>Life Saving Platform</span>
+                    </div>
+                </div>
+            </div>
         </div>
-    {% endif %}
+    </div>
 </div>
 
 {% if user.is_authenticated %}
     {% if user.role == 'admin' %}
-        <!-- Admin Dashboard -->
-        <div class="row">
-            <div class="col-md-3 mb-3">
-                <div class="card bg-danger text-white p-4">
-                    <h3>Total Donors</h3>
-                    <p class="display-6">{{ total_donors }}</p>
+        <!-- Admin Dashboard - Keep exactly the same -->
+        <div class="container">
+            <!-- Statistics Cards - Make them clickable -->
+            <div class="row g-4 mb-5">
+                <div class="col-xl-3 col-md-6">
+                    <a href="{% url 'admin_donors' %}" class="text-decoration-none">
+                        <div class="stat-card stat-card-danger" style="transition: all 0.3s ease; cursor: pointer; position: relative;" 
+                             onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 10px 30px rgba(0,0,0,0.15)'; this.style.background='linear-gradient(135deg, #fff, #ffe6e6)'" 
+                             onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 20px rgba(0,0,0,0.08)'; this.style.background='white'">
+                            <div class="stat-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 class="stat-number">{{ total_donors }}</h3>
+                                <p class="stat-label">Total Donors</p>
+                            </div>
+                            <div class="stat-trend">
+                                <i class="fas fa-arrow-up"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <a href="{% url 'admin_requests' %}" class="text-decoration-none">
+                        <div class="stat-card stat-card-warning" style="transition: all 0.3s ease; cursor: pointer; position: relative;" 
+                             onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 10px 30px rgba(0,0,0,0.15)'; this.style.background='linear-gradient(135deg, #fff, #fff8e6)'" 
+                             onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 20px rgba(0,0,0,0.08)'; this.style.background='white'">
+                            <div class="stat-icon">
+                                <i class="fas fa-hand-holding-medical"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 class="stat-number">{{ total_requests }}</h3>
+                                <p class="stat-label">Total Requests</p>
+                            </div>
+                            <div class="stat-trend">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <a href="{% url 'admin_requests' %}" class="text-decoration-none">
+                        <div class="stat-card stat-card-info" style="transition: all 0.3s ease; cursor: pointer; position: relative;" 
+                             onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 10px 30px rgba(0,0,0,0.15)'; this.style.background='linear-gradient(135deg, #fff, #e6f7ff)'" 
+                             onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 20px rgba(0,0,0,0.08)'; this.style.background='white'">
+                            <div class="stat-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 class="stat-number">{{ pending_requests }}</h3>
+                                <p class="stat-label">Pending Requests</p>
+                            </div>
+                            <div class="stat-trend">
+                                <i class="fas fa-exclamation-circle"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <a href="{% url 'admin_blood_banks' %}" class="text-decoration-none">
+                        <div class="stat-card stat-card-success" style="transition: all 0.3s ease; cursor: pointer; position: relative;" 
+                             onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 10px 30px rgba(0,0,0,0.15)'; this.style.background='linear-gradient(135deg, #fff, #e6ffe6)'" 
+                             onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 20px rgba(0,0,0,0.08)'; this.style.background='white'">
+                            <div class="stat-icon">
+                                <i class="fas fa-tint"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 class="stat-number">{{ available_units }}</h3>
+                                <p class="stat-label">Available Units</p>
+                            </div>
+                            <div class="stat-trend">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                        </div>
+                    </a>
                 </div>
             </div>
-            <div class="col-md-3 mb-3">
-                <div class="card bg-warning text-dark p-4">
-                    <h3>Total Requests</h3>
-                    <p class="display-6">{{ total_requests }}</p>
-                </div>
-            </div>
-            <div class="col-md-3 mb-3">
-                <div class="card bg-info text-white p-4">
-                    <h3>Pending Requests</h3>
-                    <p class="display-6">{{ pending_requests }}</p>
-                </div>
-            </div>
-            <div class="col-md-3 mb-3">
-                <div class="card bg-success text-white p-4">
-                    <h3>Available Blood Units</h3>
-                    <p class="display-6">{{ available_units }}</p>
-                </div>
-            </div>
-        </div>
 
-        <!-- Admin Quick Actions -->
-        <div class="row mt-4">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h4>Admin Quick Actions</h4>
+            <!-- Quick Actions -->
+            <div class="row g-4 mb-5">
+                <div class="col-12">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fas fa-bolt me-2"></i>
+                                Quick Actions
+                            </h3>
+                            <p class="card-subtitle">Manage system operations efficiently</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="action-grid">
+                                <a href="{% url 'admin_requests' %}" class="action-card">
+                                    <div class="action-icon bg-primary">
+                                        <i class="fas fa-list-alt"></i>
+                                    </div>
+                                    <div class="action-content">
+                                        <h5>Manage Requests</h5>
+                                        <p>Review and approve donation requests</p>
+                                    </div>
+                                    <div class="action-arrow">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </div>
+                                </a>
+                                
+                                <a href="{% url 'admin_donors' %}" class="action-card">
+                                    <div class="action-icon bg-success">
+                                        <i class="fas fa-user-friends"></i>
+                                    </div>
+                                    <div class="action-content">
+                                        <h5>Manage Donors</h5>
+                                        <p>View and manage donor profiles</p>
+                                    </div>
+                                    <div class="action-arrow">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </div>
+                                </a>
+                                
+                                <a href="{% url 'search_donors' %}" class="action-card">
+                                    <div class="action-icon bg-info">
+                                        <i class="fas fa-search"></i>
+                                    </div>
+                                    <div class="action-content">
+                                        <h5>Search Donors</h5>
+                                        <p>Find donors by blood group or location</p>
+                                    </div>
+                                    <div class="action-arrow">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </div>
+                                </a>
+                                
+                                <a href="{% url 'admin_blood_banks' %}" class="action-card">
+                                    <div class="action-icon bg-warning">
+                                        <i class="fas fa-hospital"></i>
+                                    </div>
+                                    <div class="action-content">
+                                        <h5>Blood Banks</h5>
+                                        <p>Manage blood bank inventory</p>
+                                    </div>
+                                    <div class="action-arrow">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <div class="d-flex gap-3 flex-wrap">
-                            <a href="{% url 'admin_requests' %}" class="btn btn-primary">Manage Requests</a>
-                            <a href="{% url 'admin_donors' %}" class="btn btn-success">Manage Donors</a>
-                            <a href="{% url 'search_donors' %}" class="btn btn-info">Search Donors</a>
-                            <a href="{% url 'admin_blood_banks' %}" class="btn btn-info">Blood Banks</a>
-                            <a href="/admin/" class="btn btn-warning">Django Admin</a>
+                </div>
+            </div>
+
+            <!-- Blood Banks Section -->
+            <div class="row g-4">
+                <div class="col-12">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fas fa-hospital me-2"></i>
+                                Blood Banks
+                            </h3>
+                            <p class="card-subtitle">Available blood banks and their inventory</p>
+                        </div>
+                        <div class="card-body">
+                            {% if banks %}
+                                <div class="blood-banks-grid">
+                                    {% for bank in banks %}
+                                    <div class="blood-bank-card">
+                                        <div class="bank-header">
+                                            <h4 class="bank-name">{{ bank.name }}</h4>
+                                            <span class="bank-status active">Active</span>
+                                        </div>
+                                        <div class="bank-info">
+                                            <div class="info-item">
+                                                <i class="fas fa-map-marker-alt"></i>
+                                                <span>{{ bank.address|default:"Address not provided" }}</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <i class="fas fa-city"></i>
+                                                <span>{{ bank.city }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="blood-inventory">
+                                            <div class="inventory-item">
+                                                <span class="blood-type">A+</span>
+                                                <span class="units">{{ bank.units_a_plus }}</span>
+                                            </div>
+                                            <div class="inventory-item">
+                                                <span class="blood-type">B+</span>
+                                                <span class="units">{{ bank.units_b_plus }}</span>
+                                            </div>
+                                            <div class="inventory-item">
+                                                <span class="blood-type">O+</span>
+                                                <span class="units">{{ bank.units_o_plus }}</span>
+                                            </div>
+                                            <div class="inventory-item">
+                                                <span class="blood-type">AB+</span>
+                                                <span class="units">{{ bank.units_ab_plus }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <div class="empty-state">
+                                    <i class="fas fa-hospital-symbol"></i>
+                                    <h4>No Blood Banks Registered</h4>
+                                    <p>There are no blood banks registered in the system yet.</p>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Recent Blood Banks -->
-        <div class="row mt-4">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h4>Blood Banks</h4>
+    {% else %}
+        <!-- Enhanced Donor Dashboard -->
+        <div class="container">
+            <!-- Profile and Quick Stats Section -->
+            <div class="row g-4 mb-4">
+                <!-- Profile Card - Left Side Upper -->
+                <div class="col-lg-4">
+                    <div class="dashboard-card profile-main-card">
+                        <div class="profile-header-main">
+                            <div class="profile-avatar-main">
+                                {% if donor_profile.profile_photo %}
+                                    <img src="{{ donor_profile.profile_photo.url }}" alt="Profile Photo" class="profile-img">
+                                {% else %}
+                                    <div class="avatar-placeholder-main">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                {% endif %}
+                                <div class="online-indicator"></div>
+                            </div>
+                            <div class="profile-info-main">
+                                <h3 class="profile-name">{{ user.get_full_name|default:user.username }}</h3>
+                                <p class="profile-email">{{ user.email }}</p>
+                                <div class="blood-group-main {{ donor_profile.blood_group|lower }}">
+                                    {{ donor_profile.blood_group|default:"Not Set" }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="profile-details-main">
+                            <div class="detail-item-main">
+                                <i class="fas fa-phone"></i>
+                                <span>{{ donor_profile.phone|default:"Not provided" }}</span>
+                            </div>
+                            <div class="detail-item-main">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>{{ donor_profile.city|default:"Not provided" }}</span>
+                            </div>
+                            <div class="detail-item-main">
+                                <i class="fas fa-calendar"></i>
+                                <span>Member since {{ user.date_joined|date:"M Y" }}</span>
+                            </div>
+                            <div class="detail-item-main">
+                                <i class="fas fa-heart"></i>
+                                <span>Last donation: {{ donor_profile.last_donation|default:"Never" }}</span>
+                            </div>
+                        </div>
+                        <div class="profile-actions-main">
+                            <a href="{% url 'donor_profile' %}" class="btn btn-outline-light btn-sm">
+                                <i class="fas fa-edit me-1"></i>Update Profile
+                            </a>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        {% if banks %}
-                            <div class="row">
-                                {% for bank in banks %}
-                                <div class="col-md-4 mb-3">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h5 class="card-title">{{ bank.name }}</h5>
-                                            <p class="card-text">
-                                                <strong>Address:</strong> {{ bank.address|default:"Not provided" }}<br>
-                                                <strong>City:</strong> {{ bank.city }}<br>
-                                                <strong>A+ Units:</strong> {{ bank.units_a_plus }}<br>
-                                                <strong>B+ Units:</strong> {{ bank.units_b_plus }}<br>
-                                                <strong>O+ Units:</strong> {{ bank.units_o_plus }}<br>
-                                                <strong>AB+ Units:</strong> {{ bank.units_ab_plus }}
-                                            </p>
+                </div>
+
+                <!-- Quick Stats - Right Side -->
+                <div class="col-lg-8">
+                    <div class="row g-3 h-100">
+                        <!-- Total Donations - NOT Clickable -->
+                        <div class="col-md-6">
+                            <div class="quick-stat-card stat-total">
+                                <div class="stat-icon-main">
+                                    <i class="fas fa-hand-holding-heart"></i>
+                                </div>
+                                <div class="stat-content-main">
+                                    <h2 class="stat-number-main">{{ donation_count }}</h2>
+                                    <p class="stat-label-main">Total Donations</p>
+                                    <span class="stat-trend-up">Life Saver</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Pending Requests - NOT Clickable -->
+                        <div class="col-md-6">
+                            <div class="quick-stat-card stat-pending">
+                                <div class="stat-icon-main">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="stat-content-main">
+                                    <h2 class="stat-number-main">{{ pending_donation_count }}</h2>
+                                    <p class="stat-label-main">Pending Requests</p>
+                                    <span class="stat-trend-neutral">Awaiting approval</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Approved Donations - NOT Clickable -->
+                        <div class="col-md-6">
+                            <div class="quick-stat-card stat-approved">
+                                <div class="stat-icon-main">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="stat-content-main">
+                                    <h2 class="stat-number-main">{{ approved_donation_count }}</h2>
+                                    <p class="stat-label-main">Approved</p>
+                                    <span class="stat-trend-up">Successful</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Rejected Requests - NOT Clickable -->
+                        <div class="col-md-6">
+                            <div class="quick-stat-card stat-rejected">
+                                <div class="stat-icon-main">
+                                    <i class="fas fa-times-circle"></i>
+                                </div>
+                                <div class="stat-content-main">
+                                    <h2 class="stat-number-main">{{ rejected_donation_count }}</h2>
+                                    <p class="stat-label-main">Rejected</p>
+                                    <span class="stat-trend-down">Need review</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions - Upper Section -->
+            <div class="row g-4 mb-5">
+                <div class="col-12">
+                    <div class="dashboard-card quick-actions-card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fas fa-bolt me-2"></i>
+                                Quick Actions
+                            </h3>
+                            <p class="card-subtitle">Manage your donation activities efficiently</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="quick-actions-grid">
+                                <a href="{% url 'make_donation_request' %}" class="quick-action-item">
+                                    <div class="action-icon-wrapper bg-primary">
+                                        <i class="fas fa-hand-holding-medical"></i>
+                                    </div>
+                                    <div class="action-text">
+                                        <h5>Make Donation</h5>
+                                        <p>Submit new donation request</p>
+                                    </div>
+                                    <div class="action-badge new">NEW</div>
+                                </a>
+                                
+                                <a href="{% url 'donation_history' %}" class="quick-action-item">
+                                    <div class="action-icon-wrapper bg-success">
+                                        <i class="fas fa-history"></i>
+                                    </div>
+                                    <div class="action-text">
+                                        <h5>Donation History</h5>
+                                        <p>View all donation history</p>
+                                    </div>
+                                    <div class="action-badge">{{ donation_count }}</div>
+                                </a>
+                                
+                                <a href="{% url 'donation_requests' %}" class="quick-action-item">
+                                    <div class="action-icon-wrapper bg-warning">
+                                        <i class="fas fa-clipboard-list"></i>
+                                    </div>
+                                    <div class="action-text">
+                                        <h5>My Requests</h5>
+                                        <p>Check all requests</p>
+                                    </div>
+                                    <div class="action-badge">{{ pending_donation_count|add:approved_donation_count|add:rejected_donation_count }}</div>
+                                </a>
+                                
+                                <a href="{% url 'search_donors' %}" class="quick-action-item">
+                                    <div class="action-icon-wrapper bg-info">
+                                        <i class="fas fa-search"></i>
+                                    </div>
+                                    <div class="action-text">
+                                        <h5>Find Donors</h5>
+                                        <p>Search other donors</p>
+                                    </div>
+                                    <div class="action-badge">
+                                        <i class="fas fa-external-link-alt"></i>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity Section -->
+            <div class="row g-4">
+                <div class="col-12">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i class="fas fa-bell me-2"></i>
+                                Recent Activity
+                            </h3>
+                            <p class="card-subtitle">Your latest donation activities</p>
+                        </div>
+                        <div class="card-body">
+                            {% if recent_activities %}
+                                <div class="activity-timeline">
+                                    {% for activity in recent_activities %}
+                                    <div class="activity-item {{ activity.status }}">
+                                        <div class="activity-icon">
+                                            {% if activity.status == 'approved' %}
+                                                <i class="fas fa-check-circle"></i>
+                                            {% elif activity.status == 'pending' %}
+                                                <i class="fas fa-clock"></i>
+                                            {% else %}
+                                                <i class="fas fa-times-circle"></i>
+                                            {% endif %}
+                                        </div>
+                                        <div class="activity-content">
+                                            <div class="activity-header">
+                                                <h5>{{ activity.blood_group }} Donation - {{ activity.units }} Units</h5>
+                                                <span class="activity-date">{{ activity.date|date:"M d, Y" }}</span>
+                                            </div>
+                                            <div class="activity-details">
+                                                <span class="status-badge status-{{ activity.status }}">
+                                                    {{ activity.status|title }}
+                                                </span>
+                                                {% if activity.hospital %}
+                                                    <span class="hospital-name">{{ activity.hospital }}</span>
+                                                {% endif %}
+                                            </div>
                                         </div>
                                     </div>
+                                    {% endfor %}
                                 </div>
-                                {% endfor %}
-                            </div>
-                        {% else %}
-                            <p class="text-muted">No blood banks registered yet.</p>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    {% else %}
-        <!-- Donor Dashboard -->
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <div class="card bg-primary text-white p-4">
-                    <h3>Your Profile</h3>
-                    <p><strong>Username:</strong> {{ user.username }}</p>
-                    <p><strong>Email:</strong> {{ user.email }}</p>
-                    {% if donor_profile %}
-                        <p><strong>Blood Group:</strong> {{ donor_profile.blood_group }}</p>
-                        <p><strong>Phone:</strong> {{ donor_profile.phone|default:"Not provided" }}</p>
-                        <p><strong>City:</strong> {{ donor_profile.city|default:"Not provided" }}</p>
-                        <p><strong>Last Donation:</strong> {{ donor_profile.last_donation|default:"Never" }}</p>
-                    {% endif %}
-                </div>
-            </div>
-            <div class="col-md-3 mb-3">
-                <div class="card bg-success text-white p-4">
-                    <h3>Total Donations</h3>
-                    <p class="display-6">{{ donation_count }}</p>
-                </div>
-            </div>
-            <div class="col-md-3 mb-3">
-                <div class="card bg-warning text-dark p-4">
-                    <h3>Pending Requests</h3>
-                    <p class="display-6">{{ pending_donation_count }}</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Donation History -->
-        <div class="row mt-4">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h4>Your Donation History</h4>
-                    </div>
-                    <div class="card-body">
-                        {% if donations %}
-                            {% for donation in donations %}
-                            <div class="border-bottom pb-2 mb-2">
-                                <strong>Date:</strong> {{ donation.donated_at|date:"M d, Y" }}<br>
-                                <strong>Blood Group:</strong> {{ donation.blood_group }}<br>
-                                <strong>Units:</strong> {{ donation.units }}<br>
-                                {% if donation.approved_by %}
-                                    <strong>Approved By:</strong> {{ donation.approved_by.username }}
-                                {% endif %}
-                            </div>
-                            {% endfor %}
-                        {% else %}
-                            <p class="text-muted">No donation history yet.</p>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h4>Your Donation Requests</h4>
-                    </div>
-                    <div class="card-body">
-                        {% if requests %}
-                            {% for request in requests %}
-                            <div class="border-bottom pb-2 mb-2">
-                                <strong>Status:</strong> 
-                                <span class="badge 
-                                    {% if request.status == 'pending' %}bg-warning
-                                    {% elif request.status == 'approved' %}bg-success
-                                    {% else %}bg-danger{% endif %}">
-                                    {{ request.status|title }}
-                                </span><br>
-                                <strong>Blood Group:</strong> {{ request.blood_group }}<br>
-                                <strong>Units:</strong> {{ request.units }}<br>
-                                <strong>Hospital:</strong> {{ request.hospital_name|default:"Not specified" }}<br>
-                                <strong>Date:</strong> {{ request.created_at|date:"M d, Y" }}
-                            </div>
-                            {% endfor %}
-                        {% else %}
-                            <p class="text-muted">No donation requests yet.</p>
-                            <a href="{% url 'make_donation_request' %}" class="btn btn-primary btn-sm">Make Donation Request</a>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Quick Actions for Donors -->
-        <div class="row mt-4">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h4>Quick Actions</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="d-flex gap-3">
-                            <a href="{% url 'donor_profile' %}" class="btn btn-success">Update Profile</a>
-                            <a href="{% url 'make_donation_request' %}" class="btn btn-primary">Make Donation Request</a>
-                            <a href="{% url 'search_donors' %}" class="btn btn-info">Find Donors</a>
-                            <a href="{% url 'donation_requests' %}" class="btn btn-info">View My Requests</a>
-                            <a href="{% url 'donation_history' %}" class="btn btn-warning">Donation History</a>
+                            {% else %}
+                                <div class="empty-state">
+                                    <i class="fas fa-bell-slash"></i>
+                                    <h4>No Recent Activity</h4>
+                                    <p>You don't have any recent donation activities.</p>
+                                    <a href="{% url 'make_donation_request' %}" class="btn btn-primary mt-3">
+                                        <i class="fas fa-plus me-1"></i>Make Your First Donation
+                                    </a>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -209,40 +493,845 @@
         </div>
     {% endif %}
 {% else %}
-    <div class="text-center mt-5">
-        <h3 class="text-primary">Get Started</h3>
-        <p class="lead">Join our blood donation community and save lives</p>
-        
-        <div class="row justify-content-center mt-4">
-            <div class="col-md-3 mb-3">
-                <div class="card h-100">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Register as Donor</h5>
-                        <p class="card-text">Create an account to start donating blood</p>
-                        <a href="{% url 'register_page' %}" class="btn btn-primary">Register Now</a>
+    <!-- Public Landing - Keep exactly the same -->
+    <div class="container">
+        <div class="public-dashboard">
+            <div class="public-hero text-center mb-5">
+                <h2 class="public-title">Join Our Life-Saving Mission</h2>
+                <p class="public-subtitle">Be a hero in someone's life. Register as a blood donor today.</p>
+            </div>
+
+            <div class="row g-4 justify-content-center">
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-icon bg-primary">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h4>Register as Donor</h4>
+                            <p>Create an account and join our community of life-savers</p>
+                            <a href="{% url 'register_page' %}" class="btn btn-primary w-100">
+                                <i class="fas fa-arrow-right me-2"></i>Get Started
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-3 mb-3">
-                <div class="card h-100">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Login</h5>
-                        <p class="card-text">Access your donor dashboard</p>
-                        <a href="{% url 'login_page' %}" class="btn btn-success">Login</a>
+                
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-icon bg-success">
+                            <i class="fas fa-sign-in-alt"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h4>Login to Dashboard</h4>
+                            <p>Access your donor profile and manage your activities</p>
+                            <a href="{% url 'login_page' %}" class="btn btn-success w-100">
+                                <i class="fas fa-arrow-right me-2"></i>Login Now
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-3 mb-3">
-                <div class="card h-100">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Admin Access</h5>
-                        <p class="card-text">Administrator panel login</p>
-                        <a href="/admin/" class="btn btn-warning">Admin Panel</a>
+                
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-icon bg-warning">
+                            <i class="fas fa-cog"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h4>Admin Access</h4>
+                            <p>Administrator panel for system management</p>
+                            <a href="/admin/" class="btn btn-warning w-100">
+                                <i class="fas fa-arrow-right me-2"></i>Admin Panel
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 {% endif %}
+
+<style>
+/* Dashboard Hero */
+.dashboard-hero {
+    background: linear-gradient(135deg, #dc3545 0%, #b02a37 100%);
+    color: white;
+    padding: 3rem 0;
+    margin-bottom: 2rem;
+}
+
+.hero-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    margin-bottom: 1.5rem;
+}
+
+.hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.welcome-text {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.hero-stats {
+    text-align: right;
+}
+
+.stat-badge {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    backdrop-filter: blur(10px);
+}
+
+/* Dashboard Cards */
+.dashboard-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e9ecef;
+    overflow: hidden;
+}
+
+.card-header {
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid #e9ecef;
+    background: #f8f9fa;
+}
+
+.card-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+.card-subtitle {
+    color: #6c757d;
+    margin: 0.25rem 0 0 0;
+    font-size: 0.9rem;
+}
+
+.card-body {
+    padding: 2rem;
+}
+
+/* Stat Cards */
+.stat-card {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: transform 0.3s ease;
+    border-left: 4px solid;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-card-danger { border-left-color: #dc3545; }
+.stat-card-warning { border-left-color: #ffc107; }
+.stat-card-info { border-left-color: #17a2b8; }
+.stat-card-success { border-left-color: #28a745; }
+.stat-card-primary { border-left-color: #007bff; }
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.stat-card-danger .stat-icon { background: #dc3545; }
+.stat-card-warning .stat-icon { background: #ffc107; }
+.stat-card-info .stat-icon { background: #17a2b8; }
+.stat-card-success .stat-icon { background: #28a745; }
+.stat-card-primary .stat-icon { background: #007bff; }
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: 800;
+    margin: 0;
+    color: #2c3e50;
+}
+
+.stat-label {
+    color: #6c757d;
+    margin: 0;
+    font-weight: 500;
+}
+
+.stat-trend {
+    margin-left: auto;
+    font-size: 1.2rem;
+}
+
+/* Action Grid */
+.action-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.action-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.action-card:hover {
+    background: white;
+    border-color: #007bff;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    color: inherit;
+    text-decoration: none;
+}
+
+.action-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: white;
+}
+
+.action-content h5 {
+    margin: 0 0 0.25rem 0;
+    color: #2c3e50;
+}
+
+.action-content p {
+    margin: 0;
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.action-arrow {
+    margin-left: auto;
+    color: #6c757d;
+}
+
+/* Blood Banks Grid */
+.blood-banks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.blood-bank-card {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.blood-bank-card:hover {
+    border-color: #007bff;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+.bank-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.bank-name {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 1.1rem;
+}
+
+.bank-status {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.bank-status.active {
+    background: #d4edda;
+    color: #155724;
+}
+
+.bank-info {
+    margin-bottom: 1rem;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.blood-inventory {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+}
+
+.inventory-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+    background: white;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+}
+
+.blood-type {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.units {
+    font-weight: 700;
+    color: #dc3545;
+}
+
+/* Enhanced Donor Dashboard Styles */
+.profile-main-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 20px;
+    padding: 2rem;
+    color: white;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.profile-main-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    transform: rotate(30deg);
+}
+
+.profile-header-main {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 2;
+}
+
+.profile-avatar-main {
+    position: relative;
+}
+
+.profile-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    object-fit: cover;
+}
+
+.avatar-placeholder-main {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+.online-indicator {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    width: 15px;
+    height: 15px;
+    background: #4CAF50;
+    border: 2px solid white;
+    border-radius: 50%;
+}
+
+.profile-info-main h3 {
+    margin: 0 0 0.25rem 0;
+    font-weight: 700;
+}
+
+.profile-email {
+    margin: 0 0 1rem 0;
+    opacity: 0.9;
+}
+
+.blood-group-main {
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 25px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    display: inline-block;
+    backdrop-filter: blur(10px);
+}
+
+.profile-details-main {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 2;
+}
+
+.detail-item-main {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+}
+
+.detail-item-main i {
+    width: 20px;
+    text-align: center;
+}
+
+.profile-actions-main {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+}
+
+/* Quick Stat Cards */
+.quick-stat-card {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: all 0.3s ease;
+    border-left: 4px solid;
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+}
+
+.quick-stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+.stat-total { border-left-color: #4CAF50; }
+.stat-pending { border-left-color: #FF9800; }
+.stat-approved { border-left-color: #2196F3; }
+.stat-rejected { border-left-color: #f44336; }
+
+.stat-icon-main {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.stat-total .stat-icon-main { background: #4CAF50; }
+.stat-pending .stat-icon-main { background: #FF9800; }
+.stat-approved .stat-icon-main { background: #2196F3; }
+.stat-rejected .stat-icon-main { background: #f44336; }
+
+.stat-number-main {
+    font-size: 2rem;
+    font-weight: 800;
+    margin: 0;
+    color: #2c3e50;
+}
+
+.stat-label-main {
+    color: #6c757d;
+    margin: 0.25rem 0;
+    font-weight: 600;
+}
+
+.stat-trend-up { color: #4CAF50; font-size: 0.8rem; }
+.stat-trend-down { color: #f44336; font-size: 0.8rem; }
+.stat-trend-neutral { color: #FF9800; font-size: 0.8rem; }
+
+/* Quick Actions Grid */
+.quick-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.quick-action-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 15px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    position: relative;
+}
+
+.quick-action-item:hover {
+    background: white;
+    border-color: #007bff;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    color: inherit;
+    text-decoration: none;
+}
+
+.action-icon-wrapper {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    color: white;
+}
+
+.action-text h5 {
+    margin: 0 0 0.25rem 0;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.action-text p {
+    margin: 0;
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.action-badge {
+    margin-left: auto;
+    padding: 0.25rem 0.75rem;
+    background: #007bff;
+    color: white;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.action-badge.new {
+    background: #4CAF50;
+}
+
+/* Activity Timeline */
+.activity-timeline {
+    position: relative;
+}
+
+.activity-item {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    border-left: 4px solid #007bff;
+}
+
+.activity-item:hover {
+    background: white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.activity-item.approved { border-left-color: #4CAF50; }
+.activity-item.pending { border-left-color: #FF9800; }
+.activity-item.rejected { border-left-color: #f44336; }
+
+.activity-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: white;
+    flex-shrink: 0;
+}
+
+.activity-item.approved .activity-icon { background: #4CAF50; }
+.activity-item.pending .activity-icon { background: #FF9800; }
+.activity-item.rejected .activity-icon { background: #f44336; }
+
+.activity-content {
+    flex: 1;
+}
+
+.activity-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.activity-header h5 {
+    margin: 0;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.activity-date {
+    color: #6c757d;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.activity-details {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.status-badge {
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.status-approved { background: #d4edda; color: #155724; }
+.status-pending { background: #fff3cd; color: #856404; }
+.status-rejected { background: #f8d7da; color: #721c24; }
+
+.hospital-name {
+    color: #6c757d;
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+/* Empty States */
+.empty-state {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: #6c757d;
+}
+
+.empty-state i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.empty-state h4 {
+    color: #6c757d;
+    margin-bottom: 0.5rem;
+}
+
+/* Public Dashboard */
+.public-dashboard {
+    padding: 2rem 0;
+}
+
+.public-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+}
+
+.public-subtitle {
+    font-size: 1.2rem;
+    color: #6c757d;
+    margin-bottom: 3rem;
+}
+
+.feature-card {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e9ecef;
+    transition: transform 0.3s ease;
+    height: 100%;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+.feature-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    color: white;
+    margin: 0 auto 1.5rem;
+}
+
+.feature-content h4 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+}
+
+.feature-content p {
+    color: #6c757d;
+    margin-bottom: 1.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .dashboard-hero {
+        padding: 2rem 0;
+        text-align: center;
+    }
+    
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-actions {
+        justify-content: center;
+        text-align: center;
+    }
+    
+    .hero-stats {
+        text-align: center;
+        margin-top: 1rem;
+    }
+    
+    .card-body {
+        padding: 1.5rem;
+    }
+    
+    .action-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .blood-banks-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .profile-info {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .public-title {
+        font-size: 2rem;
+    }
+    
+    .profile-header-main {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .quick-stat-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.75rem;
+    }
+    
+    .quick-actions-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .activity-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 576px) {
+    .stat-card {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .profile-main-card {
+        padding: 1.5rem;
+    }
+    
+    .quick-stat-card {
+        padding: 1rem;
+    }
+    
+    .quick-action-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .action-badge {
+        margin-left: 0;
+    }
+    
+    .activity-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .activity-details {
+        justify-content: center;
+    }
+}
+</style>
 
 {% endblock %}

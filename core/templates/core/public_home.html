@@ -1,149 +1,1631 @@
-{% extends 'base.html' %}
-{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood For Life</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
 
-{% block content %}
+        :root {
+            --blood-red: #8a0303;
+            --blood-dark: #5a0000;
+            --blood-light: #b30000;
+            --accent: #ff6b6b;
+            --white: #ffffff;
+            --light-bg: #f8f9fa;
+            --text-dark: #2c3e50;
+            --text-light: #6c757d;
+        }
 
-<!-- Hero Section with Wave -->
-<div class="wave-container py-5">
-    <div class="container">
-        <div class="row align-items-center min-vh-75">
-            <div class="col-lg-8 mx-auto text-center text-white">
-                <!-- Main Heading and Description Only -->
-                <h1 class="display-4 fw-bold mb-4">
-                    <i class="fas fa-tint me-3"></i>{% trans "Blood Management System" %}
+        body {
+            background-color: var(--light-bg);
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        /* Header Section */
+        .header {
+            background: var(--blood-dark);
+            color: var(--white);
+            padding: 1rem 0;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Modern Hero Section */
+        .modern-hero {
+            position: relative;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--blood-dark) 0%, var(--blood-red) 50%, var(--blood-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Floating Shapes Animation */
+        .floating-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .shape-1 {
+            width: 100px;
+            height: 100px;
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .shape-2 {
+            width: 150px;
+            height: 150px;
+            top: 60%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .shape-3 {
+            width: 80px;
+            height: 80px;
+            bottom: 20%;
+            left: 15%;
+            animation-delay: 4s;
+        }
+
+        .shape-4 {
+            width: 120px;
+            height: 120px;
+            top: 30%;
+            right: 20%;
+            animation-delay: 1s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* Blood Donation Animation */
+        .donation-animation {
+            position: absolute;
+            right: 5%;
+            bottom: 20%;
+            width: 350px;
+            height: 400px;
+            z-index: 5;
+        }
+
+        .donor {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 180px;
+            height: 350px;
+        }
+
+        .donor-head {
+            position: absolute;
+            bottom: 240px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(to right, #f8c291, #e55039);
+            border-radius: 50%;
+            z-index: 2;
+        }
+
+        .donor-hair {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 40px;
+            background: #2c2c2c;
+            border-radius: 40px 40px 0 0;
+        }
+
+        .donor-body {
+            position: absolute;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 180px;
+            background: linear-gradient(to right, #f8c291, #e55039);
+            border-radius: 60px 60px 30px 30px;
+        }
+
+        .donor-arm {
+            position: absolute;
+            bottom: 160px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 120px;
+            background: #e55039;
+            border-radius: 15px;
+            transform-origin: top center;
+            animation: armPump 4s ease-in-out infinite;
+        }
+
+        .donor-hand {
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 35px;
+            height: 25px;
+            background: #f8c291;
+            border-radius: 10px 10px 5px 5px;
+        }
+
+        .blood-bag {
+            position: absolute;
+            bottom: 50px;
+            right: 0;
+            width: 80px;
+            height: 100px;
+            background: var(--blood-red);
+            border-radius: 10px 10px 30px 30px;
+            animation: bagFill 8s linear infinite;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 3;
+        }
+
+        .blood-bag::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 0%;
+            background: var(--blood-light);
+            animation: bloodFill 8s linear infinite;
+        }
+
+        .blood-bag::after {
+            content: 'BLOOD';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: bold;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        .blood-tube {
+            position: absolute;
+            bottom: 150px;
+            right: 40px;
+            width: 6px;
+            height: 100px;
+            background: var(--blood-red);
+            transform-origin: bottom center;
+            transform: rotate(-30deg);
+            z-index: 1;
+        }
+
+        .blood-drops {
+            position: absolute;
+            bottom: 150px;
+            right: 40px;
+            width: 6px;
+            height: 100px;
+            overflow: hidden;
+            transform: rotate(-30deg);
+            z-index: 2;
+        }
+
+        .blood-drop {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--blood-light);
+            border-radius: 50% 50% 50% 0;
+            animation: bloodFlow 2s linear infinite;
+        }
+
+        .donor-chair {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 160px;
+            height: 100px;
+            background: #8B4513;
+            border-radius: 10px 10px 0 0;
+            z-index: 1;
+        }
+
+        .donor-chair::before {
+            content: '';
+            position: absolute;
+            top: -40px;
+            left: 10px;
+            width: 140px;
+            height: 50px;
+            background: #A0522D;
+            border-radius: 10px;
+        }
+
+        @keyframes armPump {
+            0%, 100% { transform: translateX(-50%) rotate(0deg); }
+            50% { transform: translateX(-50%) rotate(-15deg); }
+        }
+
+        @keyframes bagFill {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes bloodFill {
+            0% { height: 0%; }
+            100% { height: 100%; }
+        }
+
+        @keyframes bloodFlow {
+            0% { 
+                transform: translateY(-100px);
+                opacity: 1;
+            }
+            100% { 
+                transform: translateY(100px);
+                opacity: 0;
+            }
+        }
+
+        /* Hero Content */
+        .hero-content {
+            text-align: center;
+            color: var(--white);
+            position: relative;
+            z-index: 10;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            padding: 12px 24px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 3rem;
+            animation: slideDown 1s ease-out;
+        }
+
+        .badge-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            animation: slideUp 1s ease-out 0.3s both;
+        }
+
+        .title-line {
+            display: block;
+        }
+
+        .title-line.accent {
+            background: linear-gradient(45deg, var(--accent), #ffd93d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2vw, 1.4rem);
+            opacity: 0.9;
+            line-height: 1.6;
+            margin-bottom: 3rem;
+            animation: slideUp 1s ease-out 0.6s both;
+        }
+
+        /* Hero Actions */
+        .hero-actions {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 4rem;
+            animation: slideUp 1s ease-out 0.9s both;
+        }
+
+        .btn-modern {
+            position: relative;
+            padding: 1.2rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .btn-modern.primary {
+            background: linear-gradient(45deg, var(--blood-light), var(--accent));
+            color: var(--white);
+            box-shadow: 0 10px 30px rgba(220, 53, 69, 0.4);
+        }
+
+        .btn-modern.secondary {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            color: var(--white);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-modern:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(220, 53, 69, 0.6);
+        }
+
+        .btn-shine {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-modern.primary:hover .btn-shine {
+            left: 100%;
+        }
+
+        /* Trust Badges */
+        .trust-badges {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            animation: slideUp 1s ease-out 1.2s both;
+        }
+
+        .badge-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Advanced Wave System */
+        .wave-system {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 150px;
+            overflow: hidden;
+        }
+
+        .wave-layer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 100%;
+            background-repeat: repeat-x;
+            animation: waveMove 15s linear infinite;
+        }
+
+        .wave-1 {
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path fill="rgba(255,255,255,0.1)" d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z"/></svg>');
+            animation-delay: 0s;
+        }
+
+        .wave-2 {
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path fill="rgba(255,255,255,0.2)" d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z"/></svg>');
+            animation-delay: -5s;
+        }
+
+        .wave-3 {
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path fill="rgba(255,255,255,0.3)" d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z"/></svg>');
+            animation-delay: -10s;
+        }
+
+        @keyframes waveMove {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Features Grid */
+        .features-grid {
+            padding: 100px 0;
+            background: var(--light-bg);
+        }
+
+        .features-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-item {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin-bottom: 100px;
+        }
+
+        .feature-item.reverse {
+            direction: rtl;
+        }
+
+        .feature-item.reverse > * {
+            direction: ltr;
+        }
+
+        .feature-visual {
+            position: relative;
+            text-align: center;
+        }
+
+        .visual-icon {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--blood-dark), var(--blood-red));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            color: var(--white);
+            font-size: 3rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .visual-wave {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            border: 2px solid rgba(220, 53, 69, 0.1);
+            border-radius: 50%;
+            animation: pulseWave 3s ease-in-out infinite;
+        }
+
+        .feature-content h3 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .feature-content p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+
+        .feature-stats {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat .number {
+            display: block;
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--blood-red);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat .label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        /* Impact Section */
+        .impact-section {
+            padding: 100px 0;
+            background: linear-gradient(135deg, var(--blood-dark) 0%, var(--blood-red) 100%);
+            color: var(--white);
+        }
+
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .impact-card {
+            position: relative;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .impact-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #ffd93d;
+        }
+
+        .impact-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .impact-label {
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+
+        .impact-wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--accent), #ffd93d);
+            transform: scaleX(0);
+            transform-origin: left;
+            animation: waveFill 2s ease-in-out infinite;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            position: relative;
+            padding: 100px 0;
+            background: linear-gradient(135deg, var(--blood-dark) 0%, var(--blood-red) 100%);
+            color: var(--white);
+            text-align: center;
+        }
+
+        .cta-content h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .cta-content p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-actions {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-cta {
+            padding: 1.2rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-cta.primary {
+            background: var(--white);
+            color: var(--blood-red);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-cta.secondary {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid var(--white);
+        }
+
+        .btn-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 255, 255, 0.4);
+        }
+
+        /* Footer Section */
+        .footer-section {
+            background: var(--text-dark);
+            color: var(--white);
+            padding: 2rem 0;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--white);
+            text-decoration: none;
+            transition: color 0.3s;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        .footer-copyright {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            position: relative;
+            background: white;
+            margin: 5% auto;
+            padding: 2rem;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.4s ease;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+            transition: color 0.3s;
+        }
+
+        .close-btn:hover {
+            color: var(--blood-red);
+        }
+
+        .modal-header {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--blood-red);
+        }
+
+        .modal-header h2 {
+            color: var(--blood-red);
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .modal-body {
+            line-height: 1.6;
+            color: var(--text-dark);
+        }
+
+        .modal-body h3 {
+            color: var(--blood-red);
+            margin: 1.5rem 0 0.5rem 0;
+            font-size: 1.3rem;
+        }
+
+        .modal-body p {
+            margin-bottom: 1rem;
+        }
+
+        .modal-body ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal-body li {
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.8rem;
+            background: var(--light-bg);
+            border-radius: 8px;
+        }
+
+        .contact-item i {
+            color: var(--blood-red);
+            font-size: 1.2rem;
+            width: 30px;
+        }
+
+        /* Animations */
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulseWave {
+            0%, 100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        @keyframes waveFill {
+            0%, 100% {
+                transform: scaleX(0);
+            }
+            50% {
+                transform: scaleX(1);
+            }
+        }
+
+        /* Blood Drop Animation */
+        .blood-drop-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .blood-drop-fall {
+            position: absolute;
+            width: 20px;
+            height: 30px;
+            background: rgba(220, 53, 69, 0.7);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            animation: dropFall 8s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes dropFall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+
+        .scroll-arrow {
+            width: 30px;
+            height: 30px;
+            border-right: 3px solid var(--white);
+            border-bottom: 3px solid var(--white);
+            transform: rotate(45deg);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: rotate(45deg) translateY(0);
+            }
+            50% {
+                transform: rotate(45deg) translateY(-10px);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .header p {
+                font-size: 1rem;
+            }
+            
+            .hero-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn-modern {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .trust-badges {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .feature-item {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                text-align: center;
+            }
+            
+            .feature-stats {
+                justify-content: center;
+            }
+            
+            .cta-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn-cta {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .donation-animation {
+                display: none;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .footer-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .modal-content {
+                margin: 10% auto;
+                width: 95%;
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-content {
+                padding: 1rem;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .feature-content h3 {
+                font-size: 2rem;
+            }
+            
+            .impact-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="header-content">
+            <h1>Blood for Life</h1>
+            <p>Saving lives through blood donation</p>
+        </div>
+    </header>
+
+    <!-- Ultra Modern Hero Section -->
+    <div class="modern-hero">
+        <!-- Animated Background Elements -->
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+        </div>
+        
+        <!-- Blood Drop Background Animation -->
+        <div class="blood-drop-bg" id="bloodDropsContainer"></div>
+        
+        <!-- Blood Donation Animation -->
+        <div class="donation-animation">
+            <div class="donor">
+                <div class="donor-chair"></div>
+                <div class="donor-body"></div>
+                <div class="donor-head">
+                    <div class="donor-hair"></div>
+                </div>
+                <div class="donor-arm">
+                    <div class="donor-hand"></div>
+                </div>
+            </div>
+            <div class="blood-bag"></div>
+            <div class="blood-tube"></div>
+            <div class="blood-drops" id="bloodDrops"></div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="container">
+            <div class="hero-content">
+                <!-- Animated Logo/Badge -->
+                <div class="hero-badge">
+                    <div class="badge-icon">
+                        <i class="fas fa-tint"></i>
+                    </div>
+                    <span>Life Saver Network</span>
+                </div>
+
+                <!-- Main Heading with Typing Effect -->
+                <h1 class="hero-title">
+                    <span class="title-line">Every Drop</span>
+                    <span class="title-line accent">Saves Lives</span>
                 </h1>
-                <p class="lead mb-5 fs-5">
-                    {% trans "Join our mission to save lives through blood donation." %}
-                    {% trans "Register as a donor or manage blood banks efficiently." %}
+
+                <!-- Subtitle -->
+                <p class="hero-subtitle">
+                    Join thousands of heroes in our mission to make blood donation accessible, efficient, and life-changing for everyone in need.
                 </p>
 
-                <!-- Action Buttons -->
-                <div class="d-flex flex-wrap justify-content-center gap-4 mb-5">
-                    <a href="{% url 'register_page' %}" class="btn btn-light btn-lg px-5 py-3 fw-bold text-danger">
-                        <i class="fas fa-user-plus me-2"></i>{% trans "Register as Donor" %}
+                <!-- Enhanced Action Buttons -->
+                <div class="hero-actions">
+                    <a href="/register" class="btn-modern primary">
+                        <span class="btn-content">
+                            <i class="fas fa-heart"></i>
+                            Become a Donor
+                        </span>
+                        <div class="btn-shine"></div>
                     </a>
-                    <a href="{% url 'login_page' %}" class="btn btn-outline-light btn-lg px-5 py-3 fw-bold">
-                        <i class="fas fa-sign-in-alt me-2"></i>{% trans "Login to Dashboard" %}
+                    <a href="/login" class="btn-modern secondary">
+                        <span class="btn-content">
+                            <i class="fas fa-rocket"></i>
+                            Access Dashboard
+                        </span>
+                    </a>
+                </div>
+
+                <!-- Trust Badges -->
+                <div class="trust-badges">
+                    <div class="badge-item">
+                        <div class="badge-icon">
+                            <i class="fas fa-shield-check"></i>
+                        </div>
+                        <span>Secure Platform</span>
+                    </div>
+                    <div class="badge-item">
+                        <div class="badge-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <span>Instant Matching</span>
+                    </div>
+                    <div class="badge-item">
+                        <div class="badge-icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <span>Nationwide</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advanced Wave System -->
+        <div class="wave-system">
+            <div class="wave-layer wave-1"></div>
+            <div class="wave-layer wave-2"></div>
+            <div class="wave-layer wave-3"></div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="scroll-indicator">
+            <div class="scroll-arrow"></div>
+        </div>
+    </div>
+
+    <!-- Features Grid Section -->
+    <section class="features-grid">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Transform Blood Donation</h2>
+                <p class="section-subtitle">Experience the future of life-saving technology</p>
+            </div>
+
+            <div class="features-container">
+                <!-- Feature 1 -->
+                <div class="feature-item">
+                    <div class="feature-visual">
+                        <div class="visual-icon">
+                            <i class="fas fa-user-friends"></i>
+                        </div>
+                        <div class="visual-wave"></div>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Smart Donor Network</h3>
+                        <p>AI-powered matching connects patients with compatible donors in real-time across the entire network.</p>
+                        <div class="feature-stats">
+                            <div class="stat">
+                                <span class="number">5min</span>
+                                <span class="label">Avg. Response</span>
+                            </div>
+                            <div class="stat">
+                                <span class="number">99%</span>
+                                <span class="label">Success Rate</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="feature-item reverse">
+                    <div class="feature-visual">
+                        <div class="visual-icon">
+                            <i class="fas fa-chart-network"></i>
+                        </div>
+                        <div class="visual-wave"></div>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Live Blood Tracking</h3>
+                        <p>Real-time inventory management with predictive analytics to prevent shortages before they happen.</p>
+                        <div class="feature-stats">
+                            <div class="stat">
+                                <span class="number">24/7</span>
+                                <span class="label">Monitoring</span>
+                            </div>
+                            <div class="stat">
+                                <span class="number">95%</span>
+                                <span class="label">Efficiency</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="feature-item">
+                    <div class="feature-visual">
+                        <div class="visual-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <div class="visual-wave"></div>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Mobile First Design</h3>
+                        <p>Seamless experience across all devices with instant notifications and one-tap actions for donors.</p>
+                        <div class="feature-stats">
+                            <div class="stat">
+                                <span class="number">100%</span>
+                                <span class="label">Mobile Ready</span>
+                            </div>
+                            <div class="stat">
+                                <span class="number">2x</span>
+                                <span class="label">Faster Response</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Statistics -->
+    <section class="impact-section">
+        <div class="container">
+            <div class="impact-grid">
+                <div class="impact-card">
+                    <div class="impact-icon">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <div class="impact-content">
+                        <div class="impact-number" data-count="12500">0</div>
+                        <div class="impact-label">Lives Impacted</div>
+                    </div>
+                    <div class="impact-wave"></div>
+                </div>
+                
+                <div class="impact-card">
+                    <div class="impact-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="impact-content">
+                        <div class="impact-number" data-count="8500">0</div>
+                        <div class="impact-label">Active Donors</div>
+                    </div>
+                    <div class="impact-wave"></div>
+                </div>
+                
+                <div class="impact-card">
+                    <div class="impact-icon">
+                        <i class="fas fa-hospital"></i>
+                    </div>
+                    <div class="impact-content">
+                        <div class="impact-number" data-count="250">0</div>
+                        <div class="impact-label">Partner Hospitals</div>
+                    </div>
+                    <div class="impact-wave"></div>
+                </div>
+                
+                <div class="impact-card">
+                    <div class="impact-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <div class="impact-content">
+                        <div class="impact-number" data-count="15">0</div>
+                        <div class="impact-label">Cities Covered</div>
+                    </div>
+                    <div class="impact-wave"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to Make a Difference?</h2>
+                <p>Join our community of life-savers today and be the reason someone gets to see tomorrow.</p>
+                <div class="cta-actions">
+                    <a href="/register" class="btn-cta primary">
+                        <i class="fas fa-star"></i>
+                        Start Saving Lives
+                    </a>
+                    <a href="/login" class="btn-cta secondary">
+                        <i class="fas fa-play"></i>
+                        See How It Works
                     </a>
                 </div>
             </div>
         </div>
-    </div>
-    
-    <!-- Wave Background -->
-    <div class="waves">
-        <div class="wave wave1"></div>
-        <div class="wave wave2"></div>
-        <div class="wave wave3"></div>
-    </div>
-</div>
+    </section>
 
-<!-- Features Section -->
-<div class="container py-5">
-    <div class="row text-center mb-5">
-        <div class="col-12">
-            <h2 class="text-primary mb-3">{% trans "Why Choose Our Platform?" %}</h2>
-            <p class="lead text-muted">{% trans "We make blood donation management simple and efficient" %}</p>
+    <!-- Footer Section -->
+    <footer class="footer-section">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a id="privacyLink">Privacy Policy</a>
+                    <a id="termsLink">Terms of Service</a>
+                    <a id="contactLink">Contact Us</a>
+                    <a id="aboutLink">About</a>
+                </div>
+                <div class="footer-copyright">
+                    &copy; 2025 Blood For Life | nasemulrona0661@gmail.com
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal Popups -->
+    <div id="privacyModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div class="modal-header">
+                <h2>Privacy Policy</h2>
+            </div>
+            <div class="modal-body">
+                <h3>Information We Collect</h3>
+                <p>We collect information that you provide directly to us, including:</p>
+                <ul>
+                    <li>Personal identification information (Name, email address, phone number)</li>
+                    <li>Blood type and medical information relevant to donation</li>
+                    <li>Location data to connect you with nearby donation centers</li>
+                    <li>Donation history and preferences</li>
+                </ul>
+
+                <h3>How We Use Your Information</h3>
+                <p>We use the information we collect to:</p>
+                <ul>
+                    <li>Connect donors with recipients in need</li>
+                    <li>Send important notifications about donation opportunities</li>
+                    <li>Improve our services and user experience</li>
+                    <li>Ensure the safety and compatibility of blood donations</li>
+                </ul>
+
+                <h3>Data Protection</h3>
+                <p>We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.</p>
+
+                <h3>Your Rights</h3>
+                <p>You have the right to access, correct, or delete your personal information at any time through your account settings.</p>
+            </div>
         </div>
     </div>
-    
-    <div class="row g-4">
-        <div class="col-md-4">
-            <div class="card h-100 border-0 shadow-sm">
-                <div class="card-body text-center p-4">
-                    <div class="feature-icon bg-primary text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
-                        <i class="fas fa-users fa-2x"></i>
+
+    <div id="termsModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div class="modal-header">
+                <h2>Terms of Service</h2>
+            </div>
+            <div class="modal-body">
+                <h3>Acceptance of Terms</h3>
+                <p>By accessing and using Blood For Life, you accept and agree to be bound by the terms and provision of this agreement.</p>
+
+                <h3>User Responsibilities</h3>
+                <p>As a user of this platform, you agree to:</p>
+                <ul>
+                    <li>Provide accurate and complete information during registration</li>
+                    <li>Maintain the confidentiality of your account credentials</li>
+                    <li>Use the platform only for lawful purposes</li>
+                    <li>Not misrepresent your eligibility to donate blood</li>
+                </ul>
+
+                <h3>Donation Guidelines</h3>
+                <p>All donors must meet standard blood donation requirements including:</p>
+                <ul>
+                    <li>Being in good health condition</li>
+                    <li>Meeting age and weight requirements</li>
+                    <li>Not having any contraindications for blood donation</li>
+                    <li>Providing honest medical history information</li>
+                </ul>
+
+                <h3>Service Modifications</h3>
+                <p>We reserve the right to modify or discontinue any service with or without notice. We shall not be liable to you or any third party for any modification, suspension, or discontinuance of the service.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div class="modal-header">
+                <h2>Contact Us</h2>
+            </div>
+            <div class="modal-body">
+                <p>We'd love to hear from you! Get in touch with us through any of the following methods:</p>
+
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <strong>Address</strong><br>
+                            2272 Blood Donation Center<br>
+                            Rajbari, Bangladesh
+                        </div>
                     </div>
-                    <h4 class="card-title text-primary">{% trans "Donor Management" %}</h4>
-                    <p class="card-text text-muted">
-                        {% trans "Easy registration and profile management for blood donors." %}
-                        {% trans "Track your donation history and requests." %}
-                    </p>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-md-4">
-            <div class="card h-100 border-0 shadow-sm">
-                <div class="card-body text-center p-4">
-                    <div class="feature-icon bg-success text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
-                        <i class="fas fa-hospital fa-2x"></i>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <strong>Phone</strong><br>
+                            01758101881<br>
+                            
+                        </div>
                     </div>
-                    <h4 class="card-title text-success">{% trans "Blood Bank Management" %}</h4>
-                    <p class="card-text text-muted">
-                        {% trans "Comprehensive management of blood banks and inventory." %}
-                        {% trans "Real-time tracking of blood units." %}
-                    </p>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-md-4">
-            <div class="card h-100 border-0 shadow-sm">
-                <div class="card-body text-center p-4">
-                    <div class="feature-icon bg-info text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
-                        <i class="fas fa-hand-holding-heart fa-2x"></i>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <strong>Email</strong><br>
+                            nasemulrona0661@gmail.com<br>
+                            ronanasemul@gmail.com
+                        </div>
                     </div>
-                    <h4 class="card-title text-info">{% trans "Donation Tracking" %}</h4>
-                    <p class="card-text text-muted">
-                        {% trans "Track donation requests and history." %}
-                        {% trans "Easy approval process for administrators." %}
-                    </p>
+                    <div class="contact-item">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <strong>Business Hours</strong><br>
+                            Monday - Friday: 8:00 AM - 8:00 PM<br>
+                            Saturday - Sunday: 9:00 AM - 5:00 PM
+                        </div>
+                    </div>
                 </div>
+
+                <h3>Emergency Contact</h3>
+                <p>For urgent blood donation needs or emergencies, please call our 24/7 emergency hotline: <strong>01758101881</strong></p>
+
+                <h3>Follow Us</h3>
+                <p>Stay connected with us on social media for updates and blood donation campaigns.</p>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Statistics Section -->
-<div class="bg-light py-5">
-    <div class="container">
-        <div class="row text-center">
-            <div class="col-md-3 col-6 mb-4">
-                <div class="stat-item">
-                    <h2 class="text-danger display-4 fw-bold">100+</h2>
-                    <p class="text-muted">{% trans "Registered Donors" %}</p>
-                </div>
+    <div id="aboutModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div class="modal-header">
+                <h2>About Blood For Life</h2>
             </div>
-            <div class="col-md-3 col-6 mb-4">
-                <div class="stat-item">
-                    <h2 class="text-danger display-4 fw-bold">500+</h2>
-                    <p class="text-muted">{% trans "Lives Saved" %}</p>
-                </div>
-            </div>
-            <div class="col-md-3 col-6 mb-4">
-                <div class="stat-item">
-                    <h2 class="text-danger display-4 fw-bold">50+</h2>
-                    <p class="text-muted">{% trans "Blood Banks" %}</p>
-                </div>
-            </div>
-            <div class="col-md-3 col-6 mb-4">
-                <div class="stat-item">
-                    <h2 class="text-danger display-4 fw-bold">24/7</h2>
-                    <p class="text-muted">{% trans "Support Available" %}</p>
-                </div>
+            <div class="modal-body">
+                <h3>Our Mission</h3>
+                <p>Blood For Life is dedicated to revolutionizing blood donation through technology. Our mission is to create a seamless connection between blood donors and those in need, ensuring that every drop counts in saving lives.</p>
+
+                <h3>What We Do</h3>
+                <p>We provide a comprehensive platform that:</p>
+                <ul>
+                    <li>Connects eligible donors with local blood banks and hospitals</li>
+                    <li>Tracks blood supply levels in real-time across networks</li>
+                    <li>Sends automated alerts for critical blood type shortages</li>
+                    <li>Simplifies the donation process with digital scheduling</li>
+                    <li>Educates communities about the importance of regular blood donation</li>
+                </ul>
+
+                <h3>Our Impact</h3>
+                <p>Since our establishment, we have:</p>
+                <ul>
+                    <li>Facilitated over 12,500 successful blood donations</li>
+                    <li>Connected 8,500+ active donors with recipients</li>
+                    <li>Partnered with 250+ hospitals nationwide</li>
+                    <li>Expanded to 15 major cities across the country</li>
+                </ul>
+
+                <h3>Our Team</h3>
+                <p>We are a diverse team of healthcare professionals, technology experts, and community advocates united by a common goal: to ensure no one dies waiting for blood.</p>
+
+                <h3>Future Vision</h3>
+                <p>We aim to expand our network to cover every community, implement AI-powered matching algorithms, and develop mobile blood collection units to reach remote areas.</p>
             </div>
         </div>
     </div>
-</div>
 
-<style>
-.min-vh-75 {
-    min-height: 70vh;
-}
-.btn {
-    border-radius: 12px;
-    font-weight: 600;
-    transition: all 0.3s;
-    min-width: 200px;
-}
-.btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-}
-.navbar {
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-</style>
+    <script>
+        // Enhanced counter animation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animated counters
+            const counters = document.querySelectorAll('.impact-number');
+            
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-count');
+                const duration = 2000;
+                const step = target / (duration / 16);
+                let current = 0;
+                
+                const updateCounter = () => {
+                    current += step;
+                    if (current < target) {
+                        counter.textContent = Math.floor(current).toLocaleString();
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.textContent = target.toLocaleString();
+                    }
+                };
+                
+                // Start animation when element is in viewport
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            updateCounter();
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                });
+                
+                observer.observe(counter);
+            });
 
-{% endblock %}
+            // Parallax effect for floating shapes
+            window.addEventListener('scroll', function() {
+                const scrolled = window.pageYOffset;
+                const shapes = document.querySelectorAll('.shape');
+                
+                shapes.forEach((shape, index) => {
+                    const speed = 0.5 + (index * 0.1);
+                    const yPos = -(scrolled * speed);
+                    shape.style.transform = `translateY(${yPos}px) rotate(${scrolled * 0.1}deg)`;
+                });
+            });
+
+            // Add hover effects to feature items
+            const featureItems = document.querySelectorAll('.feature-item');
+            
+            featureItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-10px)';
+                });
+                
+                item.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+            
+            // Create blood drop animation in background
+            function createBloodDrops() {
+                const container = document.getElementById('bloodDropsContainer');
+                for (let i = 0; i < 15; i++) {
+                    const drop = document.createElement('div');
+                    drop.classList.add('blood-drop-fall');
+                    drop.style.left = `${Math.random() * 100}%`;
+                    drop.style.animationDelay = `${Math.random() * 8}s`;
+                    container.appendChild(drop);
+                }
+            }
+            
+            // Create blood drops in donation animation
+            function createDonationBloodDrops() {
+                const container = document.getElementById('bloodDrops');
+                for (let i = 0; i < 3; i++) {
+                    const drop = document.createElement('div');
+                    drop.classList.add('blood-drop');
+                    drop.style.left = '0';
+                    drop.style.animationDelay = `${i * 0.7}s`;
+                    container.appendChild(drop);
+                }
+            }
+            
+            createBloodDrops();
+            createDonationBloodDrops();
+            
+            // Modal functionality
+            const privacyModal = document.getElementById('privacyModal');
+            const termsModal = document.getElementById('termsModal');
+            const contactModal = document.getElementById('contactModal');
+            const aboutModal = document.getElementById('aboutModal');
+            
+            const privacyLink = document.getElementById('privacyLink');
+            const termsLink = document.getElementById('termsLink');
+            const contactLink = document.getElementById('contactLink');
+            const aboutLink = document.getElementById('aboutLink');
+            
+            const closeButtons = document.querySelectorAll('.close-btn');
+            
+            // Open modals
+            privacyLink.addEventListener('click', () => openModal(privacyModal));
+            termsLink.addEventListener('click', () => openModal(termsModal));
+            contactLink.addEventListener('click', () => openModal(contactModal));
+            aboutLink.addEventListener('click', () => openModal(aboutModal));
+            
+            // Close modals
+            closeButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const modal = button.closest('.modal');
+                    closeModal(modal);
+                });
+            });
+            
+            // Close modal when clicking outside
+            window.addEventListener('click', (event) => {
+                if (event.target.classList.contains('modal')) {
+                    closeModal(event.target);
+                }
+            });
+            
+            function openModal(modal) {
+                modal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
+            
+            function closeModal(modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Add smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

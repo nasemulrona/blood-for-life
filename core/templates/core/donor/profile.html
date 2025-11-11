@@ -1,65 +1,748 @@
 {% extends 'base.html' %}
-
 {% block content %}
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title mb-0">
-                        <i class="fas fa-user-edit me-2"></i>
-                        Update Your Profile
-                    </h4>
-                </div>
-                <div class="card-body">
-                    <form method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        
-                        {% if form.errors %}
-                        <div class="alert alert-danger">
-                            Please correct the errors below.
-                        </div>
-                        {% endif %}
-                        
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Phone</label>
-                                {{ form.phone }}
+
+<div class="profile-update-container py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-8 col-lg-10">
+                <!-- Profile Display Card -->
+                <div class="profile-card" id="profileDisplayCard">
+                    <!-- Card Header -->
+                    <div class="profile-header">
+                        <div class="header-background"></div>
+                        <div class="header-content">
+                            <div class="profile-avatar">
+                                {% if profile.profile_photo %}
+                                    <img src="{{ profile.profile_photo.url }}" alt="Profile Photo" class="profile-photo">
+                                {% else %}
+                                    <i class="fas fa-user-edit"></i>
+                                {% endif %}
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Blood Group</label>
-                                {{ form.blood_group }}
+                            <h1 class="profile-title">Your Profile</h1>
+                            <p class="profile-subtitle">View and manage your donor information</p>
+                        </div>
+                    </div>
+
+                    <!-- Profile Information Display -->
+                    <div class="profile-body">
+                        <div class="profile-info">
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <div class="info-label">
+                                        <i class="fas fa-phone"></i>
+                                        Phone Number
+                                    </div>
+                                    <div class="info-value">{{ profile.phone|default:"Not provided" }}</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">
+                                        <i class="fas fa-tint"></i>
+                                        Blood Group
+                                    </div>
+                                    <div class="info-value">{{ profile.blood_group|default:"Not provided" }}</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">
+                                        <i class="fas fa-city"></i>
+                                        City
+                                    </div>
+                                    <div class="info-value">{{ profile.city|default:"Not provided" }}</div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-label">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        Last Donation
+                                    </div>
+                                    <div class="info-value">{{ profile.last_donation|default:"Never donated" }}</div>
+                                </div>
                             </div>
                         </div>
-                        
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">City</label>
-                                {{ form.city }}
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Last Donation Date</label>
-                                {{ form.last_donation }}
-                            </div>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label">Profile Photo</label>
-                            {{ form.profile_photo }}
-                        </div>
-                        
-                        <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-primary">
-                                Update Profile
+
+                        <!-- Edit Button -->
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-edit" id="editProfileBtn">
+                                <i class="fas fa-edit me-2"></i>
+                                Edit Profile
                             </button>
-                            <a href="{% url 'home' %}" class="btn btn-outline-secondary">
-                                Back to Dashboard
-                            </a>
                         </div>
-                    </form>
+                    </div>
+                </div>
+
+                <!-- Profile Edit Form (Initially Hidden) -->
+                <div class="profile-card" id="profileEditCard" style="display: none;">
+                    <!-- Card Header -->
+                    <div class="profile-header">
+                        <div class="header-background"></div>
+                        <div class="header-content">
+                            <div class="profile-avatar">
+                                <i class="fas fa-user-edit"></i>
+                            </div>
+                            <h1 class="profile-title">Update Your Profile</h1>
+                            <p class="profile-subtitle">Keep your information current to help save lives</p>
+                        </div>
+                    </div>
+
+                    <!-- Profile Form -->
+                    <div class="profile-body">
+                        <form method="post" enctype="multipart/form-data" class="profile-form">
+                            {% csrf_token %}
+                            
+                            <!-- Error Alert -->
+                            {% if form.errors %}
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    <div>
+                                        <strong>Please correct the errors below:</strong>
+                                        <ul class="mb-0 mt-1">
+                                            {% for field in form %}
+                                                {% for error in field.errors %}
+                                                    <li>{{ field.label }}: {{ error }}</li>
+                                                {% endfor %}
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                            {% endif %}
+
+                            <!-- Personal Information Section -->
+                            <div class="form-section">
+                                <div class="section-header">
+                                    <i class="fas fa-user-circle me-2"></i>
+                                    <h3>Personal Information</h3>
+                                </div>
+                                
+                                <div class="row g-3">
+                                    <!-- Phone Number -->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="id_phone" class="form-label">
+                                                <i class="fas fa-phone me-2"></i>Phone Number
+                                            </label>
+                                            <div class="input-group">
+                                                <span class="input-group-text">
+                                                    <i class="fas fa-mobile-alt"></i>
+                                                </span>
+                                                <input type="text" name="phone" value="{% if form.phone.value %}{{ form.phone.value }}{% else %}{{ profile.phone }}{% endif %}" class="form-control" id="id_phone">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Blood Group -->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="id_blood_group" class="form-label">
+                                                <i class="fas fa-tint me-2"></i>Blood Group
+                                            </label>
+                                            <div class="input-group">
+                                                <span class="input-group-text">
+                                                    <i class="fas fa-heartbeat"></i>
+                                                </span>
+                                                <select name="blood_group" class="form-control" id="id_blood_group">
+                                                    <option value="">Select Blood Group</option>
+                                                    <option value="A+" {% if form.blood_group.value == "A+" or profile.blood_group == "A+" %}selected{% endif %}>A+</option>
+                                                    <option value="A-" {% if form.blood_group.value == "A-" or profile.blood_group == "A-" %}selected{% endif %}>A-</option>
+                                                    <option value="B+" {% if form.blood_group.value == "B+" or profile.blood_group == "B+" %}selected{% endif %}>B+</option>
+                                                    <option value="B-" {% if form.blood_group.value == "B-" or profile.blood_group == "B-" %}selected{% endif %}>B-</option>
+                                                    <option value="AB+" {% if form.blood_group.value == "AB+" or profile.blood_group == "AB+" %}selected{% endif %}>AB+</option>
+                                                    <option value="AB-" {% if form.blood_group.value == "AB-" or profile.blood_group == "AB-" %}selected{% endif %}>AB-</option>
+                                                    <option value="O+" {% if form.blood_group.value == "O+" or profile.blood_group == "O+" %}selected{% endif %}>O+</option>
+                                                    <option value="O-" {% if form.blood_group.value == "O-" or profile.blood_group == "O-" %}selected{% endif %}>O-</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- City -->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="id_city" class="form-label">
+                                                <i class="fas fa-city me-2"></i>City
+                                            </label>
+                                            <div class="input-group">
+                                                <span class="input-group-text">
+                                                    <i class="fas fa-map-marker-alt"></i>
+                                                </span>
+                                                <input type="text" name="city" value="{% if form.city.value %}{{ form.city.value }}{% else %}{{ profile.city }}{% endif %}" class="form-control" id="id_city">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Last Donation Date -->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="id_last_donation" class="form-label">
+                                                <i class="fas fa-calendar-alt me-2"></i>Last Donation Date
+                                            </label>
+                                            <div class="input-group">
+                                                <span class="input-group-text">
+                                                    <i class="fas fa-calendar"></i>
+                                                </span>
+                                                <input type="date" name="last_donation" value="{% if form.last_donation.value %}{{ form.last_donation.value }}{% else %}{{ profile.last_donation|date:'Y-m-d' }}{% endif %}" class="form-control" id="id_last_donation">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Profile Photo Section -->
+                            <div class="form-section">
+                                <div class="section-header">
+                                    <i class="fas fa-camera me-2"></i>
+                                    <h3>Profile Photo</h3>
+                                </div>
+                                
+                                <div class="profile-photo-upload">
+                                    <!-- Current Photo Preview -->
+                                    {% if profile.profile_photo %}
+                                    <div class="current-photo mb-3">
+                                        <p class="mb-2"><strong>Current Photo:</strong></p>
+                                        <img src="{{ profile.profile_photo.url }}" alt="Current Profile Photo" class="current-photo-img">
+                                    </div>
+                                    {% endif %}
+                                    
+                                    <div class="upload-instruction mb-3">
+                                        <p class="mb-1"><strong>Change Photo (Optional):</strong></p>
+                                        <small class="text-muted">PNG, JPG up to 5MB</small>
+                                    </div>
+                                    
+                                    <div class="upload-area" id="uploadArea">
+                                        <div class="upload-placeholder">
+                                            <i class="fas fa-cloud-upload-alt"></i>
+                                            <p>Click to choose new photo</p>
+                                            <span>or drag and drop here</span>
+                                        </div>
+                                        <input type="file" name="profile_photo" accept="image/*" class="form-control" id="id_profile_photo">
+                                    </div>
+                                    <div class="upload-preview mt-3" id="uploadPreview" style="display: none;">
+                                        <p class="mb-2"><strong>New Photo Preview:</strong></p>
+                                        <img id="previewImage" src="#" alt="Preview" class="preview-img">
+                                        <button type="button" class="btn-remove-preview" id="removePreview">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="form-actions">
+                                <div class="d-flex flex-column flex-md-row gap-3">
+                                    <button type="submit" class="btn btn-update">
+                                        <i class="fas fa-save me-2"></i>
+                                        Update Profile
+                                    </button>
+                                    <button type="button" class="btn btn-cancel" id="cancelEditBtn">
+                                        <i class="fas fa-times me-2"></i>
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+/* Main Container */
+.profile-update-container {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    min-height: 100vh;
+}
+
+/* Profile Card */
+.profile-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-bottom: 2rem;
+    transition: all 0.3s ease;
+}
+
+/* Header Section */
+.profile-header {
+    position: relative;
+    background: linear-gradient(135deg, #dc3545 0%, #b02a37 100%);
+    padding: 2rem 2rem 4rem;
+    color: white;
+    text-align: center;
+}
+
+.header-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path fill="%23ffffff" opacity="0.1" d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" class="shape-fill"></path></svg>');
+    background-size: cover;
+}
+
+.header-content {
+    position: relative;
+    z-index: 2;
+}
+
+.profile-avatar {
+    width: 100px;
+    height: 100px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    font-size: 2.5rem;
+    backdrop-filter: blur(10px);
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    overflow: hidden;
+}
+
+.profile-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.profile-subtitle {
+    opacity: 0.9;
+    margin: 0;
+}
+
+/* Profile Body */
+.profile-body {
+    padding: 2.5rem;
+}
+
+/* Profile Info Display */
+.profile-info {
+    margin-bottom: 2rem;
+}
+
+.info-grid {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 10px;
+    border-left: 4px solid #dc3545;
+}
+
+.info-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.info-label i {
+    color: #dc3545;
+    width: 20px;
+}
+
+.info-value {
+    font-weight: 500;
+    color: #495057;
+}
+
+/* Form Sections */
+.form-section {
+    margin-bottom: 2.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.form-section:last-of-type {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #f8f9fa;
+}
+
+.section-header h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0;
+}
+
+.section-header i {
+    color: #dc3545;
+    font-size: 1.2rem;
+}
+
+/* Form Groups */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.input-group {
+    position: relative;
+}
+
+.input-group-text {
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
+    border-right: none;
+    color: #6c757d;
+    transition: all 0.3s ease;
+}
+
+.form-control {
+    border: 2px solid #e9ecef;
+    border-left: none;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    border-radius: 0 8px 8px 0 !important;
+    background: white;
+}
+
+.form-control:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.1);
+    background: white;
+}
+
+.form-control:focus + .input-group-text {
+    border-color: #dc3545;
+}
+
+/* Profile Photo Upload */
+.profile-photo-upload {
+    text-align: center;
+}
+
+.upload-instruction {
+    text-align: left;
+}
+
+.current-photo {
+    text-align: center;
+}
+
+.current-photo-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #dc3545;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.upload-area {
+    border: 2px dashed #dee2e6;
+    border-radius: 12px;
+    padding: 2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+    position: relative;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.upload-area:hover {
+    border-color: #dc3545;
+    background: #fff5f5;
+}
+
+.upload-area.dragover {
+    border-color: #dc3545;
+    background: #fff5f5;
+    transform: scale(1.02);
+}
+
+.upload-placeholder i {
+    font-size: 3rem;
+    color: #6c757d;
+    margin-bottom: 1rem;
+}
+
+.upload-placeholder p {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.upload-placeholder span {
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+/* Make the file input cover only the upload area */
+.upload-area input[type="file"] {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.upload-preview {
+    position: relative;
+    display: inline-block;
+}
+
+.preview-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #28a745;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.btn-remove-preview {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #dc3545;
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-remove-preview:hover {
+    background: #b02a37;
+    transform: scale(1.1);
+}
+
+/* Action Buttons */
+.form-actions {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e9ecef;
+}
+
+.btn-edit {
+    background: linear-gradient(135deg, #dc3545 0%, #b02a37 100%);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    width: 100%;
+    max-width: 200px;
+}
+
+.btn-edit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(220, 53, 69, 0.3);
+}
+
+.btn-update {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    flex: 1;
+}
+
+.btn-update:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
+}
+
+.btn-cancel {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    flex: 1;
+    text-decoration: none;
+    text-align: center;
+}
+
+.btn-cancel:hover {
+    background: #5a6268;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .profile-body {
+        padding: 1.5rem;
+    }
+    
+    .form-actions .d-flex {
+        flex-direction: column;
+    }
+    
+    .profile-header {
+        padding: 1.5rem 1rem 3rem;
+    }
+    
+    .profile-title {
+        font-size: 1.5rem;
+    }
+    
+    .upload-area {
+        max-width: 100%;
+    }
+    
+    .info-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .profile-card {
+        margin: 0 -1rem;
+        border-radius: 0;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const editProfileBtn = document.getElementById('editProfileBtn');
+    const cancelEditBtn = document.getElementById('cancelEditBtn');
+    const profileDisplayCard = document.getElementById('profileDisplayCard');
+    const profileEditCard = document.getElementById('profileEditCard');
+    
+    // Edit Profile Button Click
+    if (editProfileBtn) {
+        editProfileBtn.addEventListener('click', function() {
+            profileDisplayCard.style.display = 'none';
+            profileEditCard.style.display = 'block';
+        });
+    }
+    
+    // Cancel Edit Button Click
+    if (cancelEditBtn) {
+        cancelEditBtn.addEventListener('click', function() {
+            profileEditCard.style.display = 'none';
+            profileDisplayCard.style.display = 'block';
+        });
+    }
+    
+    // File upload preview functionality - ONLY for the upload area
+    const uploadArea = document.getElementById('uploadArea');
+    if (uploadArea) {
+        const fileInput = uploadArea.querySelector('input[type="file"]');
+        const uploadPreview = document.getElementById('uploadPreview');
+        const previewImage = document.getElementById('previewImage');
+        const removePreview = document.getElementById('removePreview');
+        
+        // Handle file selection
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                // Check file size (5MB limit)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('File size must be less than 5MB');
+                    this.value = '';
+                    return;
+                }
+                
+                // Check file type
+                if (!file.type.match('image.*')) {
+                    alert('Please select an image file (PNG, JPG, JPEG)');
+                    this.value = '';
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImage.src = e.target.result;
+                    uploadPreview.style.display = 'inline-block';
+                    uploadArea.style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Remove preview
+        if (removePreview) {
+            removePreview.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                fileInput.value = '';
+                uploadPreview.style.display = 'none';
+                uploadArea.style.display = 'block';
+            });
+        }
+        
+        // Drag and drop functionality
+        uploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadArea.classList.add('dragover');
+        });
+        
+        uploadArea.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadArea.classList.remove('dragover');
+        });
+        
+        uploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                fileInput.dispatchEvent(new Event('change'));
+            }
+        });
+    }
+});
+</script>
+
 {% endblock %}

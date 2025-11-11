@@ -1,76 +1,921 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container">
-    <div class="row">
-        <div class="col-12">
-            <h1 class="h3 mb-4">Donation History</h1>
-            
-            <div class="row mb-4">
-                <div class="col-md-4">
-                    <div class="card bg-primary text-white">
-                        <div class="card-body text-center">
-                            <h5>Total Donations</h5>
-                            <h2>{{ total_donations }}</h2>
-                        </div>
-                    </div>
+<div class="history-container">
+    <!-- Header Section -->
+    <div class="history-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="header-text">
+                    <h1 class="header-title">
+                        <i class="fas fa-history"></i>
+                        Donation History
+                    </h1>
+                    <p class="header-subtitle">Track your life-saving contributions and impact</p>
                 </div>
-                <div class="col-md-4">
-                    <div class="card bg-success text-white">
-                        <div class="card-body text-center">
-                            <h5>Total Units</h5>
-                            <h2>{{ total_units }}</h2>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card bg-info text-white">
-                        <div class="card-body text-center">
-                            <h5>Last Donation</h5>
-                            <h6>{{ history.0.donated_at|default:"Never" }}</h6>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Donation Records</h5>
-                </div>
-                <div class="card-body">
-                    {% if history %}
-                    <div class="table-responsive">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Blood Group</th>
-                                    <th>Units</th>
-                                    <th>Approved By</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for donation in history %}
-                                <tr>
-                                    <td>{{ donation.donated_at|date:"M d, Y" }}</td>
-                                    <td><span class="badge bg-danger">{{ donation.blood_group }}</span></td>
-                                    <td>{{ donation.units }}</td>
-                                    <td>{{ donation.approved_by.username|default:"System" }}</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    {% else %}
-                    <div class="text-center py-4">
-                        <i class="fas fa-history fa-3x text-muted mb-3"></i>
-                        <h5>No donation history</h5>
-                        <p class="text-muted">Your approved donations will appear here.</p>
-                    </div>
-                    {% endif %}
+                <div class="header-actions">
+                    <a href="{% url 'make_donation_request' %}" class="new-donation-btn">
+                        <i class="fas fa-plus"></i>
+                        New Donation
+                    </a>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Stats Overview -->
+    <div class="stats-overview">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon total">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-number">{{ total_donations }}</div>
+                        <div class="stat-label">Total Donations</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon units">
+                        <i class="fas fa-flask"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-number">{{ total_units }}</div>
+                        <div class="stat-label">Units Donated</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon impact">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-number">{{ total_lives_impacted }}</div>
+                        <div class="stat-label">Lives Impacted</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon recent">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-date">
+                            {% if history.0 %}
+                                {{ history.0.donated_at|date:"M d, Y" }}
+                            {% else %}
+                                Never
+                            {% endif %}
+                        </div>
+                        <div class="stat-label">Last Donation</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Impact Message -->
+        <div class="impact-message">
+            <div class="impact-content">
+                <i class="fas fa-heart"></i>
+                <div class="impact-text">
+                    <h3>You're Making a Difference!</h3>
+                    <p>Each blood donation can save up to 3 lives. Thank you for your contributions!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Donation Records -->
+        <div class="history-content">
+            <div class="section-header">
+                <h2>Donation Records</h2>
+                <p>Your complete donation timeline</p>
+            </div>
+
+            {% if history %}
+            <div class="history-timeline">
+                {% for donation in history %}
+                <div class="timeline-item">
+                    <div class="timeline-marker">
+                        <div class="marker-icon">
+                            <i class="fas fa-tint"></i>
+                        </div>
+                        <div class="timeline-line"></div>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="donation-card">
+                            <div class="donation-header">
+                                <div class="donation-date">
+                                    <i class="fas fa-calendar"></i>
+                                    {{ donation.donated_at|date:"F d, Y" }}
+                                </div>
+                                <div class="donation-badge">
+                                    <span class="blood-badge">{{ donation.blood_group }}</span>
+                                    <span class="units-badge">{{ donation.units }} unit{{ donation.units|pluralize }}</span>
+                                </div>
+                            </div>
+                            <div class="donation-body">
+                                <div class="donation-details">
+                                    <div class="detail-row">
+                                        <div class="detail-item">
+                                            <div class="detail-icon">
+                                                <i class="fas fa-user-md"></i>
+                                            </div>
+                                            <div class="detail-content">
+                                                <div class="detail-label">Approved By</div>
+                                                <div class="detail-value">
+                                                    {{ donation.approved_by.username|default:"System" }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="detail-item">
+                                            <div class="detail-icon">
+                                                <i class="fas fa-clock"></i>
+                                            </div>
+                                            <div class="detail-content">
+                                                <div class="detail-label">Donation Time</div>
+                                                <div class="detail-value">
+                                                    {{ donation.donated_at|date:"g:i A" }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="impact-stats">
+                                        <div class="impact-item">
+                                            <i class="fas fa-heart"></i>
+                                            <span>Saved up to {% widthratio donation.units 1 3 %} lives</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="donation-footer">
+                                <div class="donation-id">
+                                    #{{ forloop.revcounter }}
+                                </div>
+                                <div class="donation-actions">
+                                    <button class="action-btn share-btn" onclick="shareDonation('{{ donation.id }}')">
+                                        <i class="fas fa-share"></i>
+                                        Share
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <!-- Empty State -->
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="fas fa-history"></i>
+                </div>
+                <div class="empty-content">
+                    <h3>No Donation History Yet</h3>
+                    <p>Start your journey as a life-saver! Your approved donations will appear here once you make your first contribution.</p>
+                    <div class="empty-actions">
+                        <a href="{% url 'make_donation_request' %}" class="cta-btn">
+                            <i class="fas fa-plus"></i>
+                            Make First Donation
+                        </a>
+                        <a href="{% url 'donation_requests' %}" class="secondary-btn">
+                            <i class="fas fa-list"></i>
+                            View Requests
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Quick Stats -->
+        {% if history %}
+        <div class="quick-stats">
+            <h3>Your Impact Summary</h3>
+            <div class="stats-cards">
+                <div class="impact-card">
+                    <div class="impact-icon">
+                        <i class="fas fa-baby"></i>
+                    </div>
+                    <div class="impact-content">
+                        <div class="impact-number">{{ total_lives_impacted }}</div>
+                        <div class="impact-label">Potential Lives Saved</div>
+                    </div>
+                </div>
+                <div class="impact-card">
+                    <div class="impact-icon">
+                        <i class="fas fa-hospital"></i>
+                    </div>
+                    <div class="impact-content">
+                        <div class="impact-number">{{ total_donations }}</div>
+                        <div class="impact-label">Medical Procedures Supported</div>
+                    </div>
+                </div>
+                <div class="impact-card">
+                    <div class="impact-icon">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <div class="impact-content">
+                        <div class="impact-number">{{ history|length }}</div>
+                        <div class="impact-label">Successful Donations</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
 </div>
+
+<style>
+/* Base Styles */
+.history-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+/* Header Section */
+.history-header {
+    background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+    color: white;
+    padding: 60px 0 40px;
+    position: relative;
+    overflow: hidden;
+}
+
+.history-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="rgba(255,255,255,0.05)"><circle cx="50" cy="50" r="2"/></svg>');
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}
+
+.header-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.header-title i {
+    font-size: 2.2rem;
+    opacity: 0.9;
+}
+
+.header-subtitle {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    margin: 0;
+}
+
+.new-donation-btn {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 15px 25px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.new-donation-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+    color: white;
+    text-decoration: none;
+}
+
+/* Stats Overview */
+.stats-overview {
+    background: white;
+    padding: 40px 0;
+    margin-top: -30px;
+    position: relative;
+    z-index: 3;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.stat-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 25px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.stat-icon.total {
+    background: linear-gradient(135deg, #dc3545 0%, #b02a37 100%);
+}
+
+.stat-icon.units {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+}
+
+.stat-icon.impact {
+    background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+}
+
+.stat-icon.recent {
+    background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #2c3e50;
+    line-height: 1;
+}
+
+.stat-date {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    line-height: 1;
+}
+
+.stat-label {
+    color: #6c757d;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* Impact Message */
+.impact-message {
+    background: linear-gradient(135deg, #e7f3ff 0%, #d1ecf1 100%);
+    border: 1px solid #b3d9ff;
+    border-radius: 15px;
+    padding: 25px;
+    margin: 40px 0;
+}
+
+.impact-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.impact-content i {
+    font-size: 2.5rem;
+    color: #dc3545;
+}
+
+.impact-text h3 {
+    color: #2c3e50;
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.impact-text p {
+    color: #6c757d;
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+/* Section Header */
+.section-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.section-header h2 {
+    color: #2c3e50;
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+
+.section-header p {
+    color: #6c757d;
+    font-size: 1.1rem;
+}
+
+/* Timeline */
+.history-timeline {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.timeline-item {
+    display: flex;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.timeline-marker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 25px;
+    position: relative;
+}
+
+.marker-icon {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #dc3545 0%, #b02a37 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+    z-index: 2;
+    position: relative;
+}
+
+.timeline-line {
+    width: 2px;
+    flex: 1;
+    background: #e9ecef;
+    margin-top: 10px;
+}
+
+.timeline-item:last-child .timeline-line {
+    display: none;
+}
+
+.timeline-content {
+    flex: 1;
+    padding-bottom: 20px;
+}
+
+/* Donation Card */
+.donation-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 2px solid #e9ecef;
+}
+
+.donation-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.15);
+}
+
+.donation-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 25px 20px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.donation-date {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 1.1rem;
+}
+
+.donation-badge {
+    display: flex;
+    gap: 10px;
+}
+
+.blood-badge {
+    background: #dc3545;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.units-badge {
+    background: #007bff;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.donation-body {
+    padding: 25px;
+}
+
+.donation-details {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.detail-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.detail-icon {
+    width: 40px;
+    height: 40px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6c757d;
+    flex-shrink: 0;
+}
+
+.detail-label {
+    font-size: 0.85rem;
+    color: #6c757d;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.detail-value {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.impact-stats {
+    padding-top: 15px;
+    border-top: 1px solid #e9ecef;
+}
+
+.impact-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #28a745;
+    font-weight: 600;
+}
+
+.impact-item i {
+    font-size: 1.1rem;
+}
+
+.donation-footer {
+    padding: 20px 25px;
+    background: #f8f9fa;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.donation-id {
+    color: #6c757d;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.donation-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.action-btn {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.share-btn {
+    background: #6c757d;
+    color: white;
+}
+
+.share-btn:hover {
+    background: #5a6268;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+    margin: 40px 0;
+}
+
+.empty-icon {
+    font-size: 4rem;
+    color: #6c757d;
+    margin-bottom: 30px;
+    opacity: 0.5;
+}
+
+.empty-content h3 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.empty-content p {
+    color: #6c757d;
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+}
+
+.empty-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.cta-btn {
+    background: linear-gradient(135deg, #dc3545 0%, #b02a37 100%);
+    color: white;
+    padding: 15px 25px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+
+.cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(220, 53, 69, 0.3);
+    color: white;
+    text-decoration: none;
+}
+
+.secondary-btn {
+    background: #6c757d;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+
+.secondary-btn:hover {
+    background: #5a6268;
+    transform: translateY(-2px);
+    color: white;
+    text-decoration: none;
+}
+
+/* Quick Stats */
+.quick-stats {
+    margin: 60px 0 40px;
+}
+
+.quick-stats h3 {
+    color: #2c3e50;
+    margin-bottom: 25px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.stats-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.impact-card {
+    background: white;
+    padding: 30px 25px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease;
+}
+
+.impact-card:hover {
+    transform: translateY(-5px);
+}
+
+.impact-icon {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.8rem;
+    margin: 0 auto 20px;
+}
+
+.impact-number {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #2c3e50;
+    margin-bottom: 8px;
+}
+
+.impact-label {
+    color: #6c757d;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+    
+    .header-title {
+        font-size: 2rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .impact-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+    
+    .timeline-item {
+        flex-direction: column;
+    }
+    
+    .timeline-marker {
+        margin-right: 0;
+        margin-bottom: 15px;
+        flex-direction: row;
+        align-items: center;
+    }
+    
+    .timeline-line {
+        width: 100%;
+        height: 2px;
+        margin-top: 0;
+        margin-left: 10px;
+    }
+    
+    .detail-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .donation-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+    
+    .donation-footer {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+    
+    .empty-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .stats-cards {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 576px) {
+    .history-header {
+        padding: 40px 0 30px;
+    }
+    
+    .header-title {
+        font-size: 1.8rem;
+    }
+    
+    .donation-body {
+        padding: 20px;
+    }
+    
+    .empty-state {
+        padding: 60px 15px;
+    }
+}
+</style>
+
+<script>
+// Add some interactive animations
+document.addEventListener('DOMContentLoaded', function() {
+    const timelineItems = document.querySelectorAll('.timeline-item');
+    timelineItems.forEach((item, index) => {
+        item.style.animationDelay = `${index * 0.1}s`;
+        item.classList.add('fade-in-up');
+    });
+
+    const impactCards = document.querySelectorAll('.impact-card');
+    impactCards.forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.1 + 0.5}s`;
+        card.classList.add('fade-in-up');
+    });
+});
+
+// Share donation function
+function shareDonation(donationId) {
+    if (navigator.share) {
+        navigator.share({
+            title: 'My Blood Donation',
+            text: 'I recently donated blood and helped save lives!',
+            url: window.location.href
+        });
+    } else {
+        alert('Share functionality would be implemented here for donation ID: ' + donationId);
+    }
+}
+
+// Add CSS animation
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .fade-in-up {
+        animation: fadeInUp 0.6s ease-out both;
+    }
+`;
+document.head.appendChild(style);
+</script>
+
 {% endblock %}

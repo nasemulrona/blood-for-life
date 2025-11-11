@@ -5,7 +5,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Blood Management System 1.0\n"
+"Project-Id-Version: Blood For Life 1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-08 10:55+0000\n"
 "PO-Revision-Date: 2025-11-08 11:00+0000\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: core/templates/base.html:45
-msgid "Blood Management System"
+msgid "Blood For Life"
 msgstr "ব্লাড ম্যানেজমেন্ট সিস্টেম"
 
 #: core/templates/base.html:87
@@ -50,7 +50,7 @@ msgid "বাংলা"
 msgstr "বাংলা"
 
 #: core/templates/core/public_home.html:10
-msgid "Blood Management System"
+msgid "Blood For Life"
 msgstr "ব্লাড ম্যানেজমেন্ট সিস্টেম"
 
 #: core/templates/core/public_home.html:13

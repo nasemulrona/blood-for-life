@@ -8,9 +8,11 @@ from django.views.generic import FormView
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
-from django.db.models import Count, Sum, Q  # Q object import করুন
+from django.db.models import Count, Sum, Q 
 from django.contrib import messages
 from django.utils import timezone
+from .models import DonationRequest
+from django.shortcuts import render, redirect
 
 from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
@@ -234,11 +236,36 @@ def home(request):
         
         context['banks'] = BloodBank.objects.all()
     else:
-        # Donor dashboard data
+        # Donor dashboard data - FIXED VERSION
         try:
             # Use DonorProfile model to get the profile
             donor_profile = DonorProfile.objects.get(user=request.user)
             context['donor_profile'] = donor_profile
+            
+            # Calculate all counts for donor dashboard
+            context['donation_count'] = DonationHistory.objects.filter(donor=request.user).count()
+            context['pending_donation_count'] = DonationRequest.objects.filter(
+                donor=request.user, 
+                status='pending'
+            ).count()
+            # ADD THESE MISSING VARIABLES
+            context['approved_donation_count'] = DonationRequest.objects.filter(
+                donor=request.user, 
+                status='approved'
+            ).count()
+            context['rejected_donation_count'] = DonationRequest.objects.filter(
+                donor=request.user, 
+                status='rejected'
+            ).count()
+            
+            context['donations'] = DonationHistory.objects.filter(donor=request.user)
+            context['requests'] = DonationRequest.objects.filter(donor=request.user)
+            
+            # Recent activities for timeline
+            context['recent_activities'] = DonationRequest.objects.filter(
+                donor=request.user
+            ).order_by('-created_at')[:5]
+            
         except DonorProfile.DoesNotExist:
             # Create profile if doesn't exist
             donor_profile = DonorProfile.objects.create(
@@ -246,14 +273,14 @@ def home(request):
                 blood_group='O+'
             )
             context['donor_profile'] = donor_profile
-        
-        context['donation_count'] = DonationHistory.objects.filter(donor=request.user).count()
-        context['pending_donation_count'] = DonationRequest.objects.filter(
-            donor=request.user, 
-            status='pending'
-        ).count()
-        context['donations'] = DonationHistory.objects.filter(donor=request.user)
-        context['requests'] = DonationRequest.objects.filter(donor=request.user)
+            # Set default values for new users
+            context['donation_count'] = 0
+            context['pending_donation_count'] = 0
+            context['approved_donation_count'] = 0
+            context['rejected_donation_count'] = 0
+            context['donations'] = []
+            context['requests'] = []
+            context['recent_activities'] = []
 
     return render(request, 'core/home.html', context)
 
@@ -762,3 +789,21 @@ class DonationHistoryViewSet(viewsets.ReadOnlyModelViewSet):
         if user.role == 'donor':
             return DonationHistory.objects.filter(donor=user)
         return DonationHistory.objects.all()
+    
+    # ======================
+# CANCEL DONATION REQUEST
+# ======================
+
+@login_required
+def cancel_donation_request(request, request_id):
+    """Donor cancels their own donation request"""
+    donation_request = get_object_or_404(DonationRequest, id=request_id, donor=request.user)
+    
+    if donation_request.status == 'pending':
+        donation_request.status = 'cancelled'
+        donation_request.save()
+        messages.success(request, 'Donation request cancelled successfully!')
+    else:
+        messages.error(request, 'Cannot cancel this request. It has already been processed.')
+    
+    return redirect('donation_requests')

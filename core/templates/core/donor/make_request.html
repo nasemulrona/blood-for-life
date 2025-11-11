@@ -1,74 +1,276 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title mb-0">
-                        <i class="fas fa-hand-holding-heart text-danger me-2"></i>
-                        Make Blood Donation Request
-                    </h4>
+<div class="request-hero">
+    <div class="hero-background">
+        <div class="floating-elements">
+            <div class="floating-heart"></div>
+            <div class="floating-drop"></div>
+            <div class="floating-plus"></div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fas fa-hand-holding-heart"></i>
+                <span>Urgent Request</span>
+            </div>
+            <h1 class="hero-title">Request Blood Donation</h1>
+            <p class="hero-subtitle">Your request can save up to 3 lives. Fill in the details below to find matching donors.</p>
+        </div>
+    </div>
+</div>
+
+<div class="request-container">
+    <div class="container">
+        <div class="request-grid">
+            <!-- Progress Steps -->
+            <div class="request-sidebar">
+                <div class="steps-container">
+                    <h3>Request Process</h3>
+                    <div class="steps">
+                        <div class="step active">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <div class="step-title">Request Details</div>
+                                <div class="step-description">Fill blood type and units needed</div>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <div class="step-title">Availability</div>
+                                <div class="step-description">Set donation date</div>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <div class="step-title">Location</div>
+                                <div class="step-description">Hospital information</div>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <div class="step-title">Review</div>
+                                <div class="step-description">Submit your request</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <form method="post">
+
+                <!-- Quick Stats -->
+                <div class="quick-stats">
+                    <h4>Did You Know?</h4>
+                    <div class="stat-card">
+                        <i class="fas fa-bolt"></i>
+                        <div class="stat-content">
+                            <div class="stat-number">15min</div>
+                            <div class="stat-label">Average response time</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-users"></i>
+                        <div class="stat-content">
+                            <div class="stat-number">200+</div>
+                            <div class="stat-label">Active donors ready</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-shield-alt"></i>
+                        <div class="stat-content">
+                            <div class="stat-number">100%</div>
+                            <div class="stat-label">Verified donors only</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Form -->
+            <div class="request-form-container">
+                <div class="form-card">
+                    <div class="form-header">
+                        <h2>Blood Request Details</h2>
+                        <p>Please provide accurate information to help us find the best match</p>
+                    </div>
+
+                    <form method="post" class="request-form">
                         {% csrf_token %}
                         
                         {% if form.errors %}
-                        <div class="alert alert-danger">
-                            Please correct the errors below.
-                        </div>
+                            <div class="alert-error">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <div>
+                                    <strong>Please correct the following errors:</strong>
+                                    {% for field in form %}
+                                        {% for error in field.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </div>
+                            </div>
                         {% endif %}
-                        
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ form.blood_group.id_for_label }}" class="form-label">
-                                    Blood Group <span class="text-danger">*</span>
-                                </label>
-                                {{ form.blood_group }}
-                                {% if form.blood_group.errors %}
-                                <div class="text-danger small">
-                                    {{ form.blood_group.errors }}
+
+                        <!-- Blood Requirements Section -->
+                        <div class="form-section">
+                            <div class="section-header">
+                                <div class="section-icon">
+                                    <i class="fas fa-tint"></i>
                                 </div>
-                                {% endif %}
+                                <div class="section-title">
+                                    <h3>Blood Requirements</h3>
+                                    <p>Specify the blood type and quantity needed</p>
+                                </div>
                             </div>
-                            
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ form.units.id_for_label }}" class="form-label">
-                                    Units Required <span class="text-danger">*</span>
-                                </label>
-                                {{ form.units }}
-                                {% if form.units.errors %}
-                                <div class="text-danger small">
-                                    {{ form.units.errors }}
+
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="{{ form.blood_group.id_for_label }}" class="form-label">
+                                        Blood Group <span class="required">*</span>
+                                    </label>
+                                    <div class="select-wrapper">
+                                        <select name="blood_group" id="{{ form.blood_group.id_for_label }}" class="form-select" required>
+                                            <option value="">Select Blood Type</option>
+                                            <option value="A+">A+</option>
+                                            <option value="A-">A-</option>
+                                            <option value="B+">B+</option>
+                                            <option value="B-">B-</option>
+                                            <option value="O+">O+</option>
+                                            <option value="O-">O-</option>
+                                            <option value="AB+">AB+</option>
+                                            <option value="AB-">AB-</option>
+                                        </select>
+                                        <i class="fas fa-chevron-down"></i>
+                                    </div>
+                                    {% if form.blood_group.errors %}
+                                        <div class="error-text">
+                                            {% for error in form.blood_group.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
                                 </div>
-                                {% endif %}
-                                <div class="form-text">Maximum 5 units allowed per request</div>
+
+                                <div class="form-group">
+                                    <label for="{{ form.units.id_for_label }}" class="form-label">
+                                        Units Required <span class="required">*</span>
+                                    </label>
+                                    <div class="units-input">
+                                        <button type="button" class="unit-btn minus" onclick="adjustUnits(-1)">-</button>
+                                        <input type="number" name="units" id="{{ form.units.id_for_label }}" class="form-input" value="1" min="1" max="5" required>
+                                        <button type="button" class="unit-btn plus" onclick="adjustUnits(1)">+</button>
+                                    </div>
+                                    {% if form.units.errors %}
+                                        <div class="error-text">
+                                            {% for error in form.units.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                    <div class="input-note">Maximum 5 units allowed per request</div>
+                                </div>
                             </div>
                         </div>
-                        
-                        <div class="mb-3">
-                            <label for="{{ form.hospital_name.id_for_label }}" class="form-label">
-                                Hospital Name
-                            </label>
-                            {{ form.hospital_name }}
-                            {% if form.hospital_name.errors %}
-                            <div class="text-danger small">
-                                {{ form.hospital_name.errors }}
+
+                        <!-- Donation Schedule Section -->
+                        <div class="form-section">
+                            <div class="section-header">
+                                <div class="section-icon">
+                                    <i class="fas fa-calendar-check"></i>
+                                </div>
+                                <div class="section-title">
+                                    <h3>Donation Schedule</h3>
+                                    <p>When are you available to donate?</p>
+                                </div>
                             </div>
-                            {% endif %}
-                            <div class="form-text">Enter the hospital where you plan to donate</div>
+
+                            <div class="form-group">
+                                <label for="{{ form.donation_date.id_for_label }}" class="form-label">
+                                    Preferred Donation Date <span class="required">*</span>
+                                </label>
+                                <div class="date-input-wrapper">
+                                    <input type="date" name="donation_date" id="{{ form.donation_date.id_for_label }}" class="form-input date-input" required>
+                                    <i class="fas fa-calendar-alt"></i>
+                                </div>
+                                {% if form.donation_date.errors %}
+                                    <div class="error-text">
+                                        {% for error in form.donation_date.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <div class="input-note">This date will be visible to administrators for scheduling</div>
+                            </div>
                         </div>
-                        
-                        <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-danger">
-                                <i class="fas fa-paper-plane me-2"></i>
-                                Submit Request
+
+                        <!-- Hospital Information Section -->
+                        <div class="form-section">
+                            <div class="section-header">
+                                <div class="section-icon">
+                                    <i class="fas fa-hospital"></i>
+                                </div>
+                                <div class="section-title">
+                                    <h3>Hospital Information</h3>
+                                    <p>Where will the donation take place?</p>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="{{ form.hospital_name.id_for_label }}" class="form-label">
+                                    Hospital Name
+                                </label>
+                                <input type="text" name="hospital_name" id="{{ form.hospital_name.id_for_label }}" class="form-input" placeholder="Enter hospital name">
+                                {% if form.hospital_name.errors %}
+                                    <div class="error-text">
+                                        {% for error in form.hospital_name.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <div class="input-note">Optional - you can specify this later</div>
+                            </div>
+                        </div>
+
+                        <!-- Additional Information -->
+                        <div class="form-section">
+                            <div class="section-header">
+                                <div class="section-icon">
+                                    <i class="fas fa-info-circle"></i>
+                                </div>
+                                <div class="section-title">
+                                    <h3>Additional Information</h3>
+                                    <p>Any special requirements or notes</p>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <textarea name="additional_notes" id="additional_notes" class="form-textarea" placeholder="Add any additional information that might help administrators process your request..."></textarea>
+                                <div class="input-note">This information will be reviewed by our admin team</div>
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="form-actions">
+                            <button type="submit" class="submit-btn">
+                                <i class="fas fa-paper-plane"></i>
+                                Submit Blood Request
+                                <div class="btn-loading">
+                                    <div class="spinner"></div>
+                                </div>
                             </button>
-                            <a href="{% url 'donation_requests' %}" class="btn btn-outline-secondary">
-                                Cancel
+                            <a href="{% url 'donation_requests' %}" class="cancel-btn">
+                                <i class="fas fa-times"></i>
+                                Cancel Request
                             </a>
+                        </div>
+
+                        <div class="form-footer">
+                            <div class="security-notice">
+                                <i class="fas fa-lock"></i>
+                                <span>Your information is secure and will only be shared with verified administrators</span>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -76,4 +278,644 @@
         </div>
     </div>
 </div>
+
+<style>
+/* Hero Section */
+.request-hero {
+    background: linear-gradient(135deg, #dc3545 0%, #b02a37 100%);
+    color: white;
+    padding: 80px 0 60px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.1;
+}
+
+.floating-elements {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.floating-heart, .floating-drop, .floating-plus {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    animation: float 6s ease-in-out infinite;
+}
+
+.floating-heart {
+    width: 80px;
+    height: 80px;
+    top: 20%;
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.floating-heart::before {
+    content: '❤';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2rem;
+}
+
+.floating-drop {
+    width: 60px;
+    height: 60px;
+    top: 60%;
+    right: 15%;
+    animation-delay: 2s;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+}
+
+.floating-plus {
+    width: 40px;
+    height: 40px;
+    bottom: 30%;
+    left: 20%;
+    animation-delay: 4s;
+}
+
+.floating-plus::before {
+    content: '+';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(10deg); }
+}
+
+.hero-content {
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 8px 16px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(10px);
+}
+
+.hero-title {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Main Container */
+.request-container {
+    background: #f8f9fa;
+    padding: 60px 0;
+    min-height: calc(100vh - 200px);
+}
+
+.request-grid {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 30px;
+    align-items: start;
+}
+
+/* Sidebar */
+.request-sidebar {
+    position: sticky;
+    top: 30px;
+}
+
+.steps-container {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    margin-bottom: 25px;
+}
+
+.steps-container h3 {
+    color: #2c3e50;
+    margin-bottom: 25px;
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+.steps {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.step {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 15px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.step.active {
+    background: linear-gradient(135deg, #fff5f5 0%, #ffe6e6 100%);
+    border: 2px solid #dc3545;
+}
+
+.step-number {
+    width: 32px;
+    height: 32px;
+    background: #e9ecef;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: #6c757d;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+}
+
+.step.active .step-number {
+    background: #dc3545;
+    color: white;
+}
+
+.step-title {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 4px;
+}
+
+.step-description {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+/* Quick Stats */
+.quick-stats h4 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.stat-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    background: white;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+}
+
+.stat-card i {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #dc3545 0%, #b02a37 100%);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1rem;
+}
+
+.stat-number {
+    font-weight: 800;
+    color: #2c3e50;
+    font-size: 1.1rem;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+/* Form Container */
+.request-form-container {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.form-card {
+    padding: 40px;
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 30px;
+    border-bottom: 2px solid #f8f9fa;
+}
+
+.form-header h2 {
+    color: #2c3e50;
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+
+.form-header p {
+    color: #6c757d;
+    font-size: 1.1rem;
+}
+
+/* Form Sections */
+.form-section {
+    margin-bottom: 40px;
+    padding: 30px;
+    background: #f8f9fa;
+    border-radius: 15px;
+    border-left: 4px solid #dc3545;
+}
+
+.section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.section-icon {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #dc3545 0%, #b02a37 100%);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.section-title h3 {
+    color: #2c3e50;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.section-title p {
+    color: #6c757d;
+    margin: 0;
+}
+
+/* Form Elements */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 8px;
+}
+
+.required {
+    color: #dc3545;
+}
+
+.form-select, .form-input, .form-textarea {
+    width: 100%;
+    padding: 15px 20px;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: white;
+    font-family: inherit;
+}
+
+.form-select:focus, .form-input:focus, .form-textarea:focus {
+    outline: none;
+    border-color: #dc3545;
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+}
+
+.select-wrapper {
+    position: relative;
+}
+
+.select-wrapper i {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+    pointer-events: none;
+}
+
+/* Units Input */
+.units-input {
+    display: flex;
+    align-items: center;
+    background: white;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.unit-btn {
+    width: 45px;
+    height: 50px;
+    background: #f8f9fa;
+    border: none;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #6c757d;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.unit-btn:hover {
+    background: #e9ecef;
+    color: #dc3545;
+}
+
+.units-input .form-input {
+    border: none;
+    text-align: center;
+    padding: 15px 5px;
+    background: white;
+}
+
+/* Date Input */
+.date-input-wrapper {
+    position: relative;
+}
+
+.date-input-wrapper i {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+    pointer-events: none;
+}
+
+/* Textarea */
+.form-textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.input-note {
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-top: 8px;
+    font-weight: 500;
+}
+
+.error-text {
+    color: #dc3545;
+    font-size: 0.85rem;
+    margin-top: 5px;
+    font-weight: 500;
+}
+
+.alert-error {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    border: 1px solid #f5c6cb;
+}
+
+.alert-error i {
+    font-size: 1.3rem;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    gap: 15px;
+    margin: 40px 0 20px;
+}
+
+.submit-btn {
+    flex: 1;
+    padding: 18px 30px;
+    background: linear-gradient(135deg, #dc3545 0%, #b02a37 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    position: relative;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(220, 53, 69, 0.3);
+}
+
+.btn-loading {
+    display: none;
+}
+
+.cancel-btn {
+    padding: 18px 25px;
+    background: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.cancel-btn:hover {
+    background: #5a6268;
+    transform: translateY(-2px);
+    color: white;
+    text-decoration: none;
+}
+
+/* Form Footer */
+.form-footer {
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid #e9ecef;
+}
+
+.security-notice {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: #28a745;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .request-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .request-sidebar {
+        position: static;
+    }
+}
+
+@media (max-width: 768px) {
+    .request-hero {
+        padding: 60px 0 40px;
+    }
+    
+    .hero-title {
+        font-size: 2.2rem;
+    }
+    
+    .form-card {
+        padding: 25px;
+    }
+    
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .form-section {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-title {
+        font-size: 1.8rem;
+    }
+    
+    .form-header h2 {
+        font-size: 1.8rem;
+    }
+    
+    .section-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .steps {
+        gap: 15px;
+    }
+}
+</style>
+
+<script>
+// Units adjustment
+function adjustUnits(change) {
+    const unitsInput = document.querySelector('input[name="units"]');
+    let currentValue = parseInt(unitsInput.value) || 1;
+    let newValue = currentValue + change;
+    
+    if (newValue >= 1 && newValue <= 5) {
+        unitsInput.value = newValue;
+    }
+}
+
+// Form submission
+document.querySelector('form').addEventListener('submit', function(e) {
+    const btn = this.querySelector('.submit-btn');
+    const btnText = btn.querySelector('i').nextSibling;
+    const loader = btn.querySelector('.btn-loading');
+    
+    btnText.textContent = 'Submitting...';
+    loader.style.display = 'block';
+    btn.disabled = true;
+});
+
+// Set minimum date to today
+document.addEventListener('DOMContentLoaded', function() {
+    const dateInput = document.querySelector('input[type="date"]');
+    if (dateInput) {
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.min = today;
+        
+        if (!dateInput.value) {
+            dateInput.value = today;
+        }
+    }
+    
+    // Auto-hide alerts
+    const alerts = document.querySelectorAll('.alert-error');
+    alerts.forEach(alert => {
+        setTimeout(() => {
+            if (alert.parentNode) {
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 300);
+            }
+        }, 5000);
+    });
+});
+
+// Prevent form resubmission
+if (window.history.replaceState) {
+    window.history.replaceState(null, null, window.location.href);
+}
+</script>
+
 {% endblock %}

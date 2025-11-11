@@ -1,30 +1,71 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container">
-    <div class="row">
-        <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h1 class="h3 mb-0">
-                    <i class="fas fa-search me-2"></i>Find Blood Donors
-                </h1>
-                <a href="{% url 'home' %}" class="btn btn-outline-secondary">
-                    <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
-                </a>
+<div class="search-container">
+    <!-- Hero Search Section -->
+    <div class="search-hero">
+        <div class="hero-background">
+            <div class="floating-elements">
+                <div class="floating-cell"></div>
+                <div class="floating-drop"></div>
+                <div class="floating-heart"></div>
             </div>
-
-            <!-- Search Form -->
-            <div class="card mb-4">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="card-title mb-0">
-                        <i class="fas fa-filter me-2"></i>Search Donors
-                    </h5>
+        </div>
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i class="fas fa-search"></i>
+                    <span>Find Life Savers</span>
                 </div>
-                <div class="card-body">
-                    <form method="get" action="{% url 'search_donors' %}">
-                        <div class="row g-3">
-                            <div class="col-md-4">
-                                <label class="form-label">Blood Group Needed</label>
+                <h1 class="hero-title">Find Blood Donors</h1>
+                <p class="hero-subtitle">Connect with verified donors in your area. Every search brings hope.</p>
+                
+                <!-- Quick Search Cards -->
+                <div class="quick-search-grid">
+                    <div class="quick-search-card" data-blood-group="O+">
+                        <div class="blood-icon">O+</div>
+                        <span>O+</span>
+                    </div>
+                    <div class="quick-search-card" data-blood-group="A+">
+                        <div class="blood-icon">A+</div>
+                        <span>A+</span>
+                    </div>
+                    <div class="quick-search-card" data-blood-group="B+">
+                        <div class="blood-icon">B+</div>
+                        <span>B+</span>
+                    </div>
+                    <div class="quick-search-card" data-blood-group="AB+">
+                        <div class="blood-icon">AB+</div>
+                        <span>AB+</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Panel -->
+    <div class="search-panel">
+        <div class="container">
+            <div class="panel-card">
+                <div class="panel-header">
+                    <div class="header-content">
+                        <i class="fas fa-filter"></i>
+                        <h2>Refine Your Search</h2>
+                    </div>
+                    <a href="{% url 'home' %}" class="back-btn">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Dashboard
+                    </a>
+                </div>
+                
+                <form method="get" action="{% url 'search_donors' %}" class="search-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-tint"></i>
+                                Blood Group Needed
+                            </label>
+                            <div class="select-wrapper">
                                 <select name="blood_group" class="form-select" required>
                                     <option value="">Select Blood Group</option>
                                     <option value="A+" {% if selected_blood_group == 'A+' %}selected{% endif %}>A+</option>
@@ -36,90 +77,1037 @@
                                     <option value="AB+" {% if selected_blood_group == 'AB+' %}selected{% endif %}>AB+</option>
                                     <option value="AB-" {% if selected_blood_group == 'AB-' %}selected{% endif %}>AB-</option>
                                 </select>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label">City</label>
-                                <input type="text" name="city" class="form-control" 
-                                       placeholder="Enter city name" value="{{ selected_city }}">
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label">&nbsp;</label>
-                                <div class="d-grid">
-                                    <button type="submit" class="btn btn-danger">
-                                        <i class="fas fa-search me-2"></i>Find Donors
-                                    </button>
-                                </div>
+                                <i class="fas fa-chevron-down"></i>
                             </div>
                         </div>
-                    </form>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-map-marker-alt"></i>
+                                Location
+                            </label>
+                            <input type="text" name="city" class="form-input" 
+                                   placeholder="Enter city name" value="{{ selected_city|default:'' }}">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">&nbsp;</label>
+                            <button type="submit" class="search-btn">
+                                <i class="fas fa-search"></i>
+                                Search Donors
+                                <div class="btn-spinner">
+                                    <div class="spinner"></div>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div class="results-section">
+        <div class="container">
+            {% if donors %}
+            <div class="results-header">
+                <div class="results-count">
+                    <h2>Available Donors</h2>
+                    <span class="count-badge">{{ donors.count }} found</span>
+                </div>
+                <div class="results-actions">
+                    <button class="action-btn sort-btn">
+                        <i class="fas fa-sort"></i>
+                        Sort
+                    </button>
+                    <button class="action-btn filter-btn">
+                        <i class="fas fa-sliders-h"></i>
+                        Filter
+                    </button>
                 </div>
             </div>
 
-            <!-- Results -->
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">
-                        Available Donors ({{ donors.count }} found)
-                    </h5>
-                </div>
-                <div class="card-body">
-                    {% if donors %}
-                    <div class="row">
-                        {% for donor in donors %}
-                        <div class="col-md-6 mb-3">
-                            <div class="card h-100">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between align-items-start mb-2">
-                                        <h6 class="card-title mb-0 text-primary">
-                                            {% if donor.user.get_full_name %}
-                                                {{ donor.user.get_full_name }}
-                                            {% else %}
-                                                {{ donor.user.username }}
-                                            {% endif %}
-                                        </h6>
-                                        <span class="badge bg-danger">{{ donor.blood_group }}</span>
-                                    </div>
-                                    
-                                    <div class="donor-info small">
-                                        {% if donor.city %}
-                                        <p class="mb-1">
-                                            <i class="fas fa-map-marker-alt me-1 text-muted"></i>
-                                            {{ donor.city }}
-                                        </p>
-                                        {% endif %}
-                                        {% if donor.last_donation %}
-                                        <p class="mb-1">
-                                            <i class="fas fa-tint me-1 text-muted"></i>
-                                            Last donated: {{ donor.last_donation }}
-                                        </p>
-                                        {% endif %}
-                                        <p class="mb-0 text-success">
-                                            <i class="fas fa-check-circle me-1"></i>
-                                            Available for donation
-                                        </p>
-                                    </div>
-                                </div>
+            <div class="donors-grid">
+                {% for donor in donors %}
+                <div class="donor-card">
+                    <div class="card-header">
+                        <div class="donor-avatar">
+                            {% if donor.user.get_full_name %}
+                                {{ donor.user.get_full_name|slice:":1"|upper }}
+                            {% else %}
+                                {{ donor.user.username|slice:":1"|upper }}
+                            {% endif %}
+                        </div>
+                        <div class="donor-main-info">
+                            <h3 class="donor-name">
+                                {% if donor.user.get_full_name %}
+                                    {{ donor.user.get_full_name }}
+                                {% else %}
+                                    {{ donor.user.username }}
+                                {% endif %}
+                            </h3>
+                            <div class="donor-blood-group">
+                                <i class="fas fa-tint"></i>
+                                {{ donor.blood_group }}
                             </div>
                         </div>
-                        {% endfor %}
+                        <div class="availability-badge available">
+                            <i class="fas fa-check-circle"></i>
+                            Available
+                        </div>
                     </div>
-                    {% else %}
-                    <div class="text-center py-4">
-                        <i class="fas fa-users fa-3x text-muted mb-3"></i>
-                        <h5>No donors available</h5>
-                        <p class="text-muted">
-                            {% if selected_blood_group %}
-                                No {{ selected_blood_group }} donors found
-                                {% if selected_city %}in {{ selected_city }}{% endif %}
+                    
+                    <div class="card-body">
+                        <div class="donor-details">
+                            {% if donor.city %}
+                            <div class="detail-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>{{ donor.city }}</span>
+                            </div>
                             {% else %}
-                                Please select a blood group to search
+                            <div class="detail-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Location not specified</span>
+                            </div>
                             {% endif %}
-                        </p>
+                            
+                            {% if donor.last_donation %}
+                            <div class="detail-item">
+                                <i class="fas fa-history"></i>
+                                <span>Last donated: {{ donor.last_donation|date:"M d, Y" }}</span>
+                            </div>
+                            {% else %}
+                            <div class="detail-item">
+                                <i class="fas fa-star"></i>
+                                <span>New donor - Ready to donate</span>
+                            </div>
+                            {% endif %}
+                            
+                            <div class="detail-item">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>Verified donor</span>
+                            </div>
+                        </div>
                     </div>
-                    {% endif %}
+                    
+                    <div class="card-footer">
+                        <div class="action-buttons">
+                            <button class="contact-btn">
+                                <i class="fas fa-phone"></i>
+                                Contact
+                            </button>
+                            <button class="message-btn">
+                                <i class="fas fa-envelope"></i>
+                                Message
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <!-- Empty State -->
+            <div class="empty-state">
+                <div class="empty-illustration">
+                    <i class="fas fa-search"></i>
+                    <div class="empty-pulse"></div>
+                </div>
+                <div class="empty-content">
+                    <h3>No Donors Found</h3>
+                    <p>
+                        {% if selected_blood_group %}
+                            We couldn't find any {{ selected_blood_group }} donors 
+                            {% if selected_city %}in {{ selected_city }}{% endif %}
+                            at the moment.
+                        {% else %}
+                            Please select a blood group to start your search
+                        {% endif %}
+                    </p>
+                    <div class="empty-suggestions">
+                        <div class="suggestion">
+                            <i class="fas fa-sync-alt"></i>
+                            <span>Try a different blood group</span>
+                        </div>
+                        <div class="suggestion">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Search in nearby cities</span>
+                        </div>
+                        <div class="suggestion">
+                            <i class="fas fa-broadcast-tower"></i>
+                            <span>Check back later for new donors</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="search-stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">Active Donors</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Availability</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Verified</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Cities</div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+/* Base Styles */
+.search-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+/* Hero Section */
+.search-hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 80px 0 60px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.1;
+}
+
+.floating-elements {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.floating-cell, .floating-drop, .floating-heart {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    animation: float 6s ease-in-out infinite;
+}
+
+.floating-cell {
+    width: 60px;
+    height: 60px;
+    top: 20%;
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.floating-cell::before {
+    content: '🩸';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.5rem;
+}
+
+.floating-drop {
+    width: 40px;
+    height: 40px;
+    top: 60%;
+    right: 15%;
+    animation-delay: 2s;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+}
+
+.floating-heart {
+    width: 50px;
+    height: 50px;
+    bottom: 30%;
+    left: 20%;
+    animation-delay: 4s;
+}
+
+.floating-heart::before {
+    content: '❤';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.8rem;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(10deg); }
+}
+
+.hero-content {
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 8px 16px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(10px);
+}
+
+.hero-title {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero-subtitle {
+    font-size: 1.3rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto 40px;
+    line-height: 1.6;
+}
+
+/* Quick Search Grid */
+.quick-search-grid {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.quick-search-card {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 15px;
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    min-width: 80px;
+}
+
+.quick-search-card:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-5px);
+}
+
+.blood-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    color: #dc3545;
+    margin: 0 auto 8px;
+    font-size: 0.9rem;
+}
+
+.quick-search-card span {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* Search Panel */
+.search-panel {
+    margin-top: -40px;
+    position: relative;
+    z-index: 3;
+}
+
+.panel-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.header-content i {
+    font-size: 1.5rem;
+    color: #667eea;
+}
+
+.header-content h2 {
+    color: #2c3e50;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.back-btn {
+    background: #6c757d;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+    background: #5a6268;
+    color: white;
+    text-decoration: none;
+}
+
+/* Search Form */
+.search-form {
+    padding: 30px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 20px;
+    align-items: end;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 8px;
+}
+
+.form-label i {
+    color: #667eea;
+    font-size: 1rem;
+}
+
+.select-wrapper {
+    position: relative;
+}
+
+.form-select, .form-input {
+    width: 100%;
+    padding: 15px 20px;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: white;
+    font-family: inherit;
+}
+
+.form-select:focus, .form-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.select-wrapper i {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+    pointer-events: none;
+}
+
+.search-btn {
+    background: linear-gradient(135deg, #dc3545 0%, #b02a37 100%);
+    color: white;
+    border: none;
+    padding: 15px 25px;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+}
+
+.search-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(220, 53, 69, 0.3);
+}
+
+.btn-spinner {
+    display: none;
+}
+
+.spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid transparent;
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Results Section */
+.results-section {
+    padding: 60px 0;
+}
+
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.results-count h2 {
+    color: #2c3e50;
+    font-size: 2rem;
+    font-weight: 800;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.count-badge {
+    background: #dc3545;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.results-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.action-btn {
+    background: white;
+    border: 2px solid #e9ecef;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    color: #6c757d;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.action-btn:hover {
+    border-color: #667eea;
+    color: #667eea;
+}
+
+/* Donors Grid - FIXED FOR CONSISTENT HEIGHTS */
+.donors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 25px;
+    align-items: stretch; /* This ensures all cards stretch to same height */
+}
+
+.donor-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Force all cards to take full height of grid cell */
+    min-height: 380px; /* Set minimum height for consistency */
+}
+
+.donor-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    border-color: #667eea;
+}
+
+/* Card Header - FIXED ALIGNMENT */
+.card-header {
+    display: flex;
+    align-items: flex-start;
+    padding: 25px 25px 20px;
+    border-bottom: 1px solid #e9ecef;
+    gap: 15px;
+    flex-shrink: 0; /* Prevent header from shrinking */
+}
+
+.donor-avatar {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 800;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+}
+
+.donor-main-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.donor-name {
+    color: #2c3e50;
+    font-size: 1.3rem; /* Fixed font size */
+    font-weight: 700;
+    margin-bottom: 8px;
+    line-height: 1.2;
+    word-wrap: break-word;
+    min-height: 1.6em; /* Ensure consistent height for names */
+}
+
+.donor-blood-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #dc3545;
+    font-weight: 600;
+    font-size: 0.9rem; /* Fixed font size */
+}
+
+.availability-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem; /* Fixed font size */
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
+    align-self: flex-start;
+}
+
+.availability-badge.available {
+    background: #d4edda;
+    color: #155724;
+}
+
+/* Card Body - FIXED FOR CONSISTENT HEIGHT */
+.card-body {
+    padding: 20px 25px;
+    flex: 1; /* Take remaining space */
+    display: flex;
+    flex-direction: column;
+}
+
+.donor-details {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1; /* Ensure details take available space */
+}
+
+.detail-item {
+    display: flex;
+    align-items: flex-start; /* Align items to top */
+    gap: 10px;
+    color: #6c757d;
+    font-size: 0.9rem; /* Fixed font size */
+    line-height: 1.4;
+    min-height: 20px; /* Ensure consistent line height */
+}
+
+.detail-item i {
+    width: 16px;
+    color: #667eea;
+    flex-shrink: 0;
+    margin-top: 2px; /* Align icons properly */
+}
+
+.detail-item span {
+    word-wrap: break-word;
+    flex: 1;
+}
+
+/* Card Footer - FIXED BUTTON SIZES */
+.card-footer {
+    padding: 20px 25px;
+    background: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+    flex-shrink: 0; /* Prevent footer from shrinking */
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+.contact-btn, .message-btn {
+    flex: 1;
+    padding: 12px 15px; /* Fixed padding */
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 0.9rem; /* Fixed font size */
+    min-height: 44px; /* Fixed minimum height */
+    line-height: 1; /* Consistent line height */
+}
+
+.contact-btn {
+    background: #28a745;
+    color: white;
+}
+
+.contact-btn:hover {
+    background: #218838;
+}
+
+.message-btn {
+    background: #007bff;
+    color: white;
+}
+
+.message-btn:hover {
+    background: #0056b3;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.empty-illustration {
+    position: relative;
+    font-size: 4rem;
+    color: #6c757d;
+    margin-bottom: 30px;
+    display: inline-block;
+}
+
+.empty-pulse {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+    border: 2px solid #667eea;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: translate(-50%, -50%) scale(0.8); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(1.4); opacity: 0; }
+}
+
+.empty-content h3 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.empty-content p {
+    color: #6c757d;
+    font-size: 1.1rem;
+    margin-bottom: 40px;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.empty-suggestions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.suggestion {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.suggestion i {
+    color: #667eea;
+    font-size: 1.1rem;
+}
+
+.suggestion span {
+    color: #6c757d;
+    font-weight: 500;
+}
+
+/* Search Stats */
+.search-stats {
+    background: white;
+    padding: 40px 0;
+    border-top: 1px solid #e9ecef;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    text-align: center;
+}
+
+.stat-item {
+    padding: 20px;
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #667eea;
+    margin-bottom: 8px;
+}
+
+.stat-label {
+    color: #6c757d;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .donors-grid {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.2rem;
+    }
+    
+    .panel-header {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+    
+    .results-header {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+    
+    .quick-search-grid {
+        gap: 10px;
+    }
+    
+    .quick-search-card {
+        min-width: 70px;
+        padding: 12px;
+    }
+    
+    .card-header {
+        flex-wrap: wrap;
+    }
+    
+    .availability-badge {
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 576px) {
+    .search-hero {
+        padding: 60px 0 40px;
+    }
+    
+    .hero-title {
+        font-size: 1.8rem;
+    }
+    
+    .donors-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .card-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+    
+    .donor-avatar {
+        margin: 0 auto;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .availability-badge {
+        align-self: center;
+        margin-top: 0;
+    }
+}
+</style>
+
+<script>
+// Quick search functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const quickSearchCards = document.querySelectorAll('.quick-search-card');
+    const bloodGroupSelect = document.querySelector('select[name="blood_group"]');
+    
+    quickSearchCards.forEach(card => {
+        card.addEventListener('click', function() {
+            const bloodGroup = this.getAttribute('data-blood-group');
+            bloodGroupSelect.value = bloodGroup;
+            
+            // Add visual feedback
+            quickSearchCards.forEach(c => c.style.background = 'rgba(255, 255, 255, 0.2)');
+            this.style.background = 'rgba(255, 255, 255, 0.4)';
+            
+            // Auto-submit form
+            document.querySelector('.search-form').submit();
+        });
+    });
+    
+    // Form submission loading state
+    const searchForm = document.querySelector('.search-form');
+    const searchBtn = searchForm.querySelector('.search-btn');
+    const btnSpinner = searchForm.querySelector('.btn-spinner');
+    
+    searchForm.addEventListener('submit', function(e) {
+        searchBtn.disabled = true;
+        btnSpinner.style.display = 'block';
+    });
+    
+    // Demo contact buttons
+    const contactBtns = document.querySelectorAll('.contact-btn');
+    contactBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            alert('Contact functionality would be implemented here');
+        });
+    });
+    
+    const messageBtns = document.querySelectorAll('.message-btn');
+    messageBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            alert('Message functionality would be implemented here');
+        });
+    });
+
+    // Force equal card heights after load
+    setTimeout(() => {
+        const cards = document.querySelectorAll('.donor-card');
+        let maxHeight = 0;
+        
+        // Find the maximum height
+        cards.forEach(card => {
+            const height = card.offsetHeight;
+            if (height > maxHeight) {
+                maxHeight = height;
+            }
+        });
+        
+        // Apply maximum height to all cards
+        cards.forEach(card => {
+            card.style.minHeight = maxHeight + 'px';
+        });
+    }, 100);
+});
+
+// Add animations
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .donor-card {
+        animation: fadeInUp 0.6s ease-out both;
+    }
+    
+    .donor-card:nth-child(1) { animation-delay: 0.1s; }
+    .donor-card:nth-child(2) { animation-delay: 0.2s; }
+    .donor-card:nth-child(3) { animation-delay: 0.3s; }
+    .donor-card:nth-child(4) { animation-delay: 0.4s; }
+    .donor-card:nth-child(5) { animation-delay: 0.5s; }
+    .donor-card:nth-child(6) { animation-delay: 0.6s; }
+`;
+document.head.appendChild(style);
+</script>
+
 {% endblock %}

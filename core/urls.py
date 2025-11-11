@@ -5,6 +5,7 @@ from .views import CustomTokenObtainPairView, CustomLoginView, CustomRegisterVie
 from django.conf.urls.i18n import i18n_patterns
 from django.views.i18n import set_language
 from .views import send_blood_notification, notify_blood_need
+from . import views
 
 from .views import (
     RegisterAPI, LogoutAPI, UserViewSet, DonorProfileViewSet, 
@@ -68,4 +69,5 @@ urlpatterns = [
     
     # Search Functionality URL - ADD THIS LINE
     path('search/donors/', search_donors, name='search_donors'),
+    path('cancel-request/<int:request_id>/', views.cancel_donation_request, name='cancel_donation_request'),
 ]

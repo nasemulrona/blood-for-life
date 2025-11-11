@@ -1,205 +1,831 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div class="row justify-content-center mt-4">
-    <div class="col-md-8 col-lg-6">
-        <div class="card shadow-lg border-0">
-            <div class="card-header bg-primary text-white text-center py-3">
-                <h3 class="mb-0"><i class="fas fa-user-plus me-2"></i>Register as Donor</h3>
-                <p class="mb-0 mt-1">Join our blood donation community</p>
+<div class="register-container">
+    <div class="register-wrapper">
+        <!-- Left Side - Illustration -->
+        <div class="register-illustration">
+            <div class="illustration-content">
+                <div class="blood-drop-animation">
+                    <div class="blood-drop"></div>
+                    <div class="blood-drop"></div>
+                    <div class="blood-drop"></div>
+                </div>
+                <h2>Save Lives With Every Donation</h2>
+                <p>Join thousands of heroes who make a difference in their community</p>
+                <div class="features-list">
+                    <div class="feature-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Secure & Private</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-bolt"></i>
+                        <span>Quick Registration</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-heart"></i>
+                        <span>Make an Impact</span>
+                    </div>
+                </div>
             </div>
-            <div class="card-body p-4">
-                <form method="post">
+        </div>
+
+        <!-- Right Side - Form -->
+        <div class="register-form-section">
+            <div class="form-container">
+                <!-- Header -->
+                <div class="form-header">
+                    <div class="logo">
+                        <i class="fas fa-tint"></i>
+                        <span>BloodConnect</span>
+                    </div>
+                    <h1>Create Account</h1>
+                    <p>Start your journey as a life saver</p>
+                </div>
+
+                <form method="post" class="registration-form">
                     {% csrf_token %}
                     
                     {% if form.non_field_errors %}
-                        <div class="alert alert-danger alert-dismissible fade show">
-                            {% for error in form.non_field_errors %}
-                                {{ error }}
-                            {% endfor %}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        <div class="error-alert">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <div>
+                                {% for error in form.non_field_errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
                         </div>
                     {% endif %}
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="id_email" class="form-label fw-bold">Email Address *</label>
-                                {{ form.email }}
-                                {% if form.email.errors %}
-                                    <div class="text-danger small mt-1">
-                                        {% for error in form.email.errors %}
-                                            <i class="fas fa-exclamation-circle me-1"></i>{{ error }}
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
+                    <!-- Account Details -->
+                    <div class="form-group">
+                        <label class="form-label">Account Details</label>
+                        <div class="form-row">
+                            <div class="form-col">
+                                <div class="input-group">
+                                    <input type="email" name="email" id="id_email" class="form-input" placeholder="Enter your email" required>
+                                    <span class="input-icon">
+                                        <i class="fas fa-envelope"></i>
+                                    </span>
+                                    {% if form.email.errors %}
+                                        <div class="error-text">
+                                            {% for error in form.email.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="id_username" class="form-label fw-bold">Username *</label>
-                                {{ form.username }}
-                                {% if form.username.errors %}
-                                    <div class="text-danger small mt-1">
-                                        {% for error in form.username.errors %}
-                                            <i class="fas fa-exclamation-circle me-1"></i>{{ error }}
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="id_first_name" class="form-label fw-bold">First Name</label>
-                                {{ form.first_name }}
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="id_last_name" class="form-label fw-bold">Last Name</label>
-                                {{ form.last_name }}
+                            <div class="form-col">
+                                <div class="input-group">
+                                    <input type="text" name="username" id="id_username" class="form-input" placeholder="Choose a username" required>
+                                    <span class="input-icon">
+                                        <i class="fas fa-user"></i>
+                                    </span>
+                                    {% if form.username.errors %}
+                                        <div class="error-text">
+                                            {% for error in form.username.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="id_password" class="form-label fw-bold">Password *</label>
-                                {{ form.password }}
-                                {% if form.password.errors %}
-                                    <div class="text-danger small mt-1">
-                                        {% for error in form.password.errors %}
-                                            <i class="fas fa-exclamation-circle me-1"></i>{{ error }}
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
+                    <!-- Personal Info -->
+                    <div class="form-group">
+                        <label class="form-label">Personal Information</label>
+                        <div class="form-row">
+                            <div class="form-col">
+                                <div class="input-group">
+                                    <input type="text" name="first_name" id="id_first_name" class="form-input" placeholder="First name (optional)">
+                                    <span class="input-icon">
+                                        <i class="fas fa-signature"></i>
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="id_password2" class="form-label fw-bold">Confirm Password *</label>
-                                {{ form.password2 }}
-                                {% if form.password2.errors %}
-                                    <div class="text-danger small mt-1">
-                                        {% for error in form.password2.errors %}
-                                            <i class="fas fa-exclamation-circle me-1"></i>{{ error }}
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
+                            <div class="form-col">
+                                <div class="input-group">
+                                    <input type="text" name="last_name" id="id_last_name" class="form-input" placeholder="Last name (optional)">
+                                    <span class="input-icon">
+                                        <i class="fas fa-signature"></i>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Blood Group Field -->
-                    <div class="mb-4">
-                        <label for="id_blood_group" class="form-label fw-bold">Blood Group *</label>
-                        <select name="blood_group" id="id_blood_group" class="form-select" required>
-                            <option value="">Select your blood group</option>
-                            <option value="A+">A+</option>
-                            <option value="A-">A-</option>
-                            <option value="B+">B+</option>
-                            <option value="B-">B-</option>
-                            <option value="O+">O+</option>
-                            <option value="O-">O-</option>
-                            <option value="AB+">AB+</option>
-                            <option value="AB-">AB-</option>
-                        </select>
-                        <div class="form-text">Please select your blood group accurately.</div>
-                    </div>
-
-                    <!-- Phone Number Field -->
-                    <div class="mb-3">
-                        <label for="id_phone" class="form-label fw-bold">Phone Number</label>
-                        {{ form.phone }}
-                        {% if form.phone.errors %}
-                            <div class="text-danger small mt-1">
-                                {% for error in form.phone.errors %}
-                                    <i class="fas fa-exclamation-circle me-1"></i>{{ error }}
-                                {% endfor %}
+                    <!-- Security -->
+                    <div class="form-group">
+                        <label class="form-label">Security</label>
+                        <div class="form-row">
+                            <div class="form-col">
+                                <div class="input-group password-group">
+                                    <input type="password" name="password" id="id_password" class="form-input" placeholder="Create password" required>
+                                    <span class="input-icon">
+                                        <i class="fas fa-lock"></i>
+                                    </span>
+                                    <button type="button" class="password-toggle" onclick="togglePassword('id_password')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    {% if form.password.errors %}
+                                        <div class="error-text">
+                                            {% for error in form.password.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
                             </div>
-                        {% endif %}
-                        <div class="form-text">Optional - You can add your phone number later</div>
-                    </div>
-
-                    <!-- City Field -->
-                    <div class="mb-3">
-                        <label for="id_city" class="form-label fw-bold">City</label>
-                        {{ form.city }}
-                        {% if form.city.errors %}
-                            <div class="text-danger small mt-1">
-                                {% for error in form.city.errors %}
-                                    <i class="fas fa-exclamation-circle me-1"></i>{{ error }}
-                                {% endfor %}
+                            <div class="form-col">
+                                <div class="input-group password-group">
+                                    <input type="password" name="password2" id="id_password2" class="form-input" placeholder="Confirm password" required>
+                                    <span class="input-icon">
+                                        <i class="fas fa-lock"></i>
+                                    </span>
+                                    <button type="button" class="password-toggle" onclick="togglePassword('id_password2')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    {% if form.password2.errors %}
+                                        <div class="error-text">
+                                            {% for error in form.password2.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
                             </div>
-                        {% endif %}
-                        <div class="form-text">Optional - Enter your city name</div>
+                        </div>
                     </div>
 
-                    <!-- Last Donation Field -->
-                    <div class="mb-4">
-                        <label for="id_last_donation" class="form-label fw-bold">Last Donation Date</label>
-                        {{ form.last_donation }}
-                        {% if form.last_donation.errors %}
-                            <div class="text-danger small mt-1">
-                                {% for error in form.last_donation.errors %}
-                                    <i class="fas fa-exclamation-circle me-1"></i>{{ error }}
-                                {% endfor %}
+                    <!-- Medical Info -->
+                    <div class="form-group">
+                        <label class="form-label">Medical Information</label>
+                        <div class="form-row">
+                            <div class="form-col">
+                                <div class="input-group">
+                                    <select name="blood_group" id="id_blood_group" class="form-input" required>
+                                        <option value="">Select blood group</option>
+                                        <option value="A+">A+</option>
+                                        <option value="A-">A-</option>
+                                        <option value="B+">B+</option>
+                                        <option value="B-">B-</option>
+                                        <option value="O+">O+</option>
+                                        <option value="O-">O-</option>
+                                        <option value="AB+">AB+</option>
+                                        <option value="AB-">AB-</option>
+                                    </select>
+                                    <span class="input-icon">
+                                        <i class="fas fa-heartbeat"></i>
+                                    </span>
+                                </div>
                             </div>
-                        {% endif %}
-                        <div class="form-text">Optional - When was your last blood donation?</div>
+                        </div>
                     </div>
 
-                    <div class="mb-4">
-                        <label for="id_role" class="form-label fw-bold">Account Type *</label>
-                        {{ form.role }}
-                        <div class="form-text">Select "Donor" if you want to donate blood, "Admin" for management access.</div>
+                    <!-- Account Type -->
+                    <div class="form-group">
+                        <label class="form-label">Account Type</label>
+                        <div class="role-selector">
+                            <div class="role-option">
+                                <input type="radio" name="role" value="donor" id="role_donor" checked>
+                                <label for="role_donor">
+                                    <i class="fas fa-hand-holding-heart"></i>
+                                    <span>Donor</span>
+                                    <small>I want to donate blood</small>
+                                </label>
+                            </div>
+                            <div class="role-option">
+                                <input type="radio" name="role" value="admin" id="role_admin">
+                                <label for="role_admin">
+                                    <i class="fas fa-user-cog"></i>
+                                    <span>Administrator</span>
+                                    <small>System management</small>
+                                </label>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="d-grid mb-3">
-                        <button type="submit" class="btn btn-primary btn-lg fw-bold">
-                            <i class="fas fa-user-plus me-2"></i>Create Account
-                        </button>
-                    </div>
+                    <!-- Submit -->
+                    <button type="submit" class="submit-btn">
+                        <span class="btn-text">Create Account</span>
+                        <div class="btn-loader">
+                            <div class="spinner"></div>
+                        </div>
+                    </button>
 
-                    <div class="text-center">
-                        <p class="mb-0">Already have an account? 
-                            <a href="{% url 'login_page' %}" class="text-primary fw-bold">Login here</a>
-                        </p>
+                    <!-- Login Link -->
+                    <div class="login-link">
+                        Already have an account? 
+                        <a href="{% url 'login_page' %}">Sign in here</a>
                     </div>
                 </form>
-            </div>
-            <div class="card-footer text-center py-3">
-                <small class="text-muted">
-                    <i class="fas fa-shield-alt me-1"></i>
-                    Your information is secure and protected
-                </small>
             </div>
         </div>
     </div>
 </div>
 
 <style>
-.card {
-    border-radius: 15px;
+/* Base Styles */
+.register-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
 }
-.form-control {
-    border-radius: 8px;
-    padding: 12px 15px;
+
+.register-wrapper {
+    display: flex;
+    max-width: 1200px;
+    width: 100%;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    min-height: 800px;
+}
+
+/* Illustration Side */
+.register-illustration {
+    flex: 1;
+    background: linear-gradient(135deg, #dc3545 0%, #b02a37 100%);
+    color: white;
+    padding: 60px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.register-illustration::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="rgba(255,255,255,0.05)"><circle cx="50" cy="50" r="2"/></svg>');
+}
+
+.illustration-content {
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+.blood-drop-animation {
+    margin-bottom: 40px;
+}
+
+.blood-drop {
+    width: 8px;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    display: inline-block;
+    margin: 0 10px;
+    animation: drip 2s ease-in-out infinite;
+}
+
+.blood-drop:nth-child(2) {
+    animation-delay: 0.3s;
+}
+
+.blood-drop:nth-child(3) {
+    animation-delay: 0.6s;
+}
+
+@keyframes drip {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(10px) scale(1.1); }
+}
+
+.illustration-content h2 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 20px;
+    line-height: 1.2;
+}
+
+.illustration-content p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-bottom: 40px;
+    line-height: 1.6;
+}
+
+.features-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.feature-item i {
+    font-size: 1.2rem;
+    width: 24px;
+}
+
+.feature-item span {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+/* Form Side */
+.register-form-section {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-container {
+    width: 100%;
+    max-width: 500px;
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #dc3545;
+    margin-bottom: 20px;
+}
+
+.logo i {
+    font-size: 2rem;
+}
+
+.form-header h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.form-header p {
+    color: #6c757d;
+    font-size: 1.1rem;
+}
+
+/* Form Styles */
+.registration-form {
+    width: 100%;
+}
+
+.form-group {
+    margin-bottom: 30px;
+}
+
+.form-label {
+    display: block;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-size: 1rem;
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.form-row:last-child {
+    margin-bottom: 0;
+}
+
+.form-col {
+    flex: 1;
+}
+
+.input-group {
+    position: relative;
+}
+
+.form-input {
+    width: 100%;
+    padding: 15px 45px 15px 45px;
     border: 2px solid #e9ecef;
-    transition: all 0.3s;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+    font-family: inherit;
 }
-.form-control:focus {
-    border-color: #0d6efd;
-    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+
+.form-input::placeholder {
+    color: #6c757d;
+    opacity: 0.8;
 }
-.btn {
-    border-radius: 8px;
-    padding: 12px;
+
+.form-input:focus {
+    outline: none;
+    border-color: #dc3545;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+    transform: translateY(-2px);
+}
+
+.form-input:focus::placeholder {
+    opacity: 0.5;
+}
+
+/* Style for select dropdown */
+.form-input[type="date"],
+.form-input select {
+    color: #2c3e50;
+    cursor: pointer;
+}
+
+.form-input[type="date"]:invalid,
+.form-input select:invalid {
+    color: #6c757d;
+}
+
+.input-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+    font-size: 1rem;
+    z-index: 2;
+}
+
+.password-group .input-icon {
+    left: 15px;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #6c757d;
+    cursor: pointer;
+    font-size: 1rem;
+    z-index: 2;
+    padding: 5px;
+}
+
+.password-toggle:hover {
+    color: #dc3545;
+}
+
+.error-text {
+    color: #dc3545;
+    font-size: 0.85rem;
+    margin-top: 5px;
+    display: block;
+    font-weight: 500;
+}
+
+.error-alert {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 15px 20px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    border: 1px solid #f5c6cb;
+}
+
+.error-alert i {
+    font-size: 1.2rem;
+    margin-top: 1px;
+    flex-shrink: 0;
+}
+
+/* Role Selector */
+.role-selector {
+    display: flex;
+    gap: 15px;
+}
+
+.role-option {
+    flex: 1;
+}
+
+.role-option input {
+    display: none;
+}
+
+.role-option label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 25px 20px;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    background: #f8f9fa;
+    height: 100%;
+}
+
+.role-option label i {
+    font-size: 2rem;
+    color: #6c757d;
+    margin-bottom: 12px;
+    transition: all 0.3s ease;
+}
+
+.role-option label span {
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 5px;
+    transition: all 0.3s ease;
+}
+
+.role-option label small {
+    color: #6c757d;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    line-height: 1.4;
+}
+
+.role-option input:checked + label {
+    border-color: #dc3545;
+    background: linear-gradient(135deg, #fff5f5 0%, #ffe6e6 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(220, 53, 69, 0.15);
+}
+
+.role-option input:checked + label i,
+.role-option input:checked + label span {
+    color: #dc3545;
+}
+
+.role-option input:checked + label small {
+    color: #dc3545;
+}
+
+.role-option label:hover {
+    border-color: #dc3545;
+    transform: translateY(-2px);
+}
+
+/* Submit Button */
+.submit-btn {
+    width: 100%;
+    padding: 18px 30px;
+    background: linear-gradient(135deg, #dc3545 0%, #b02a37 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    font-family: inherit;
+}
+
+.submit-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(220, 53, 69, 0.3);
+}
+
+.submit-btn:active {
+    transform: translateY(-1px);
+}
+
+.btn-loader {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid transparent;
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Login Link */
+.login-link {
+    text-align: center;
+    margin-top: 25px;
+    color: #6c757d;
+    font-size: 1rem;
+}
+
+.login-link a {
+    color: #dc3545;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.login-link a:hover {
+    color: #b02a37;
+    text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 968px) {
+    .register-wrapper {
+        flex-direction: column;
+        min-height: auto;
+    }
+    
+    .register-illustration {
+        padding: 40px 20px;
+    }
+    
+    .illustration-content h2 {
+        font-size: 2rem;
+    }
+    
+    .register-form-section {
+        padding: 40px 20px;
+    }
+    
+    .role-selector {
+        flex-direction: column;
+    }
+    
+    .form-row {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+
+@media (max-width: 576px) {
+    .register-container {
+        padding: 10px;
+    }
+    
+    .register-wrapper {
+        border-radius: 15px;
+    }
+    
+    .register-illustration {
+        padding: 30px 15px;
+    }
+    
+    .illustration-content h2 {
+        font-size: 1.8rem;
+    }
+    
+    .register-form-section {
+        padding: 30px 15px;
+    }
+    
+    .form-header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .features-list {
+        gap: 15px;
+    }
+    
+    .feature-item {
+        padding: 12px 15px;
+    }
+    
+    .role-option label {
+        padding: 20px 15px;
+    }
+    
+    .form-input {
+        padding: 12px 40px 12px 40px;
+    }
+}
+
+/* Fix for date input on mobile */
+@media (max-width: 768px) {
+    .form-input[type="date"] {
+        min-height: 50px;
+    }
+}
+
+/* Ensure proper font rendering */
+.form-input, .submit-btn, .login-link {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 </style>
+
+<script>
+function togglePassword(inputId) {
+    const input = document.getElementById(inputId);
+    const icon = input.parentNode.querySelector('.password-toggle i');
+    
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.className = 'fas fa-eye-slash';
+    } else {
+        input.type = 'password';
+        icon.className = 'fas fa-eye';
+    }
+}
+
+// Form submission loading state
+document.querySelector('form').addEventListener('submit', function(e) {
+    const btn = this.querySelector('.submit-btn');
+    const btnText = btn.querySelector('.btn-text');
+    const loader = btn.querySelector('.btn-loader');
+    
+    btnText.style.opacity = '0';
+    loader.style.display = 'block';
+    btn.disabled = true;
+});
+
+// Add input focus effects and clear placeholder issues
+document.addEventListener('DOMContentLoaded', function() {
+    const inputs = document.querySelectorAll('.form-input');
+    
+    inputs.forEach(input => {
+        // Clear any mixed content and ensure proper placeholder
+        if (input.placeholder.includes('�')) {
+            input.placeholder = input.placeholder.replace(/�/g, '');
+        }
+        
+        input.addEventListener('focus', function() {
+            this.parentNode.classList.add('focused');
+        });
+        
+        input.addEventListener('blur', function() {
+            this.parentNode.classList.remove('focused');
+        });
+    });
+
+    // Auto-hide alerts after 5 seconds
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(alert => {
+        setTimeout(() => {
+            if (alert.parentNode) {
+                alert.style.opacity = '0';
+                setTimeout(() => {
+                    if (alert.parentNode) {
+                        alert.remove();
+                    }
+                }, 300);
+            }
+        }, 5000);
+    });
+
+    // Fix for date input placeholder
+    const dateInput = document.getElementById('id_last_donation');
+    if (dateInput) {
+        dateInput.addEventListener('focus', function() {
+            this.type = 'date';
+        });
+        dateInput.addEventListener('blur', function() {
+            if (!this.value) {
+                this.type = 'text';
+            }
+        });
+    }
+});
+
+// Prevent form resubmission
+if (window.history.replaceState) {
+    window.history.replaceState(null, null, window.location.href);
+}
+</script>
 
 {% endblock %}
